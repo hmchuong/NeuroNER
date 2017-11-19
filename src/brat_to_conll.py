@@ -7,18 +7,35 @@ import utils_nlp
 import json
 from pycorenlp import StanfordCoreNLP
 
-
 def get_start_and_end_offset_of_token_from_spacy(token):
+    """
+    Lấy vị trí bắt đầu và kết thúc của token trong chuỗi
+    """
     start = token.idx
     end = start + len(token)
     return start, end
 
 def get_sentences_and_tokens_from_spacy(text, spacy_nlp):
+    """
+    Phân tích 1 đoạn văn thành cấu trúc sau:
+    [
+        // Sentence 1
+        [
+            {
+                "start": vị trí bắt đầu của token 1,
+                "end": vị trí kết thúc của token 1,
+                "text": nội dung token 1
+            },
+            ...
+        ],
+        ...
+    ]
+    """
     document = spacy_nlp(text)
     # sentences
     sentences = []
-    for span in document.sents:
-        sentence = [document[i] for i in range(span.start, span.end)]
+    for span in document.sents:     # span là object chứa các thuộc tính của 1 câu
+        sentence = [document[i] for i in range(span.start, span.end)]  # sentence lúc này là mảng chứa các object biển diễn 1 token
         sentence_tokens = []
         for token in sentence:
             token_dict = {}
@@ -28,7 +45,7 @@ def get_sentences_and_tokens_from_spacy(text, spacy_nlp):
                 continue
             # Make sure that the token text does not contain any space
             if len(token_dict['text'].split(' ')) != 1:
-                print("WARNING: the text of the token contains space character, replaced with hyphen\n\t{0}\n\t{1}".format(token_dict['text'], 
+                print("WARNING: the text of the token contains space character, replaced with hyphen\n\t{0}\n\t{1}".format(token_dict['text'],
                                                                                                                            token_dict['text'].replace(' ', '-')))
                 token_dict['text'] = token_dict['text'].replace(' ', '-')
             sentence_tokens.append(token_dict)
@@ -36,9 +53,17 @@ def get_sentences_and_tokens_from_spacy(text, spacy_nlp):
     return sentences
 
 def get_stanford_annotations(text, core_nlp, port=9000, annotators='tokenize,ssplit,pos,lemma'):
+    """
+    Dùng bộ StanfordCoreNLP để phân tích câu:
+
+    tokenize: Tách thành các từ
+    ssplit: Tách thành các câu
+    pos: Gán nhãn từ loại (part of speech)
+    lemma: Tra từ gốc cho các token trong văn bản
+    """
     output = core_nlp.annotate(text, properties={
         "timeout": "10000",
-        "ssplit.newlineIsSentenceBreak": "two",
+        "ssplit.newlineIsSentenceBreak": "two",             # Xác định newLine có phải là ngắt câu không? "two": 2 dòng thì mới là ngắt câu, ngoài ra còn có "always" và "never"
         'annotators': annotators,
         'outputFormat': 'json'
     })
@@ -59,7 +84,7 @@ def get_sentences_and_tokens_from_stanford(text, core_nlp):
                 continue
             # Make sure that the token text does not contain any space
             if len(token['text'].split(' ')) != 1:
-                print("WARNING: the text of the token contains space character, replaced with hyphen\n\t{0}\n\t{1}".format(token['text'], 
+                print("WARNING: the text of the token contains space character, replaced with hyphen\n\t{0}\n\t{1}".format(token['text'],
                                                                                                                            token['text'].replace(' ', '-')))
                 token['text'] = token['text'].replace(' ', '-')
             tokens.append(token)
@@ -97,7 +122,7 @@ def get_entities_from_brat(text_filepath, annotation_filepath, verbose=False):
                 # add to entitys data
                 entities.append(entity)
     if verbose: print("\n\n")
-    
+
     return text, entities
 
 def check_brat_annotation_and_text_compatibility(brat_folder):
@@ -141,12 +166,12 @@ def brat_to_conll(input_folder, output_filepath, tokenizer, language):
 
         text, entities = get_entities_from_brat(text_filepath, annotation_filepath)
         entities = sorted(entities, key=lambda entity:entity["start"])
-        
+
         if tokenizer == 'spacy':
             sentences = get_sentences_and_tokens_from_spacy(text, spacy_nlp)
         elif tokenizer == 'stanford':
             sentences = get_sentences_and_tokens_from_stanford(text, core_nlp)
-        
+
         for sentence in sentences:
             inside = False
             previous_token_label = 'O'
@@ -162,7 +187,7 @@ def brat_to_conll(input_folder, output_filepath, tokenizer, language):
                         break
                     elif token['end'] < entity['start']:
                         break
-                        
+
                 if len(entities) == 0:
                     entity={'end':0}
                 if token['label'] == 'O':
