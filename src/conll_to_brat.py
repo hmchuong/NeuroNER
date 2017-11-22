@@ -7,10 +7,10 @@ import utils_nlp
 
 def generate_reference_text_file_for_conll(conll_input_filepath, conll_output_filepath, text_folder):
     '''
-    generates reference text files and adds the corresponding filename and token offsets to conll file.
-
-    conll_input_filepath: path to a conll-formatted file without filename and token offsets
-    text_folder: folder to write the reference text file to
+    Từ file conll ban đầu, tiến hành generate ngược lại các file text (nằm trong text_folder) và conll_reference (conll_output_filepath)
+    Cấu trúc conll_output_filepath:
+    - DOCSTART: bắt đầu văn bản
+    - <token> <tên file> <startIndex> <endIndex> < 3 nhãn chuẩn conll>
     '''
     dataset_type =  utils.get_basename_without_extension(conll_input_filepath) # lấy filename mà không có phần mở rộng
     conll_file = codecs.open(conll_input_filepath, 'r', 'UTF-8')
@@ -100,6 +100,15 @@ def check_compatibility_between_conll_and_brat_text(conll_filepath, brat_folder)
     print("Done.")
 
 def output_entities(brat_output_folder, previous_filename, entities, text_filepath, text, overwrite=False):
+    """
+    Dùng để lưu entities xuống theo chuẩn brat, ngược với hàm brat_to_conll.get_entities_from_brat
+    brat_output_folder: folder để lưu 2 file .txt và .ann
+    previous_filename: tên muốn lưu cho file .ann
+    entities: cấu trúc entities được định nghĩa trong hàm brat_to_conll.get_entities_from_brat
+    text_file_path: đường dẫn file text .txt
+    text: nội dung text
+
+    """
     if previous_filename == '':
         return
     output_filepath = os.path.join(brat_output_folder, '{0}.ann'.format(previous_filename))
@@ -125,6 +134,7 @@ def conll_to_brat(conll_input_filepath, conll_output_filepath, brat_original_fol
 
     conll_input_filepath: path to conll file to convert to brat annotations
     conll_output_filepath: path to output conll file with filename and offsets that are compatible with brat annotations
+                            (dùng cho hàm generate_reference_text_file_for_conll)
     brat_original_folder: folder that contains the original .txt (and .ann) files that are formatted according to brat.
                           .txt files are used to check if the token offsets match and generate the annotation from conll.
     brat_output_folder: folder to output the text and brat annotations
@@ -136,11 +146,12 @@ def conll_to_brat(conll_input_filepath, conll_output_filepath, brat_original_fol
 
     # if brat_original_folder does not exist or have any text file
     if not os.path.exists(brat_original_folder) or len(glob.glob(os.path.join(brat_original_folder, '*.txt'))) == 0:
-        assert(conll_input_filepath != conll_output_filepath)
+        assert(conll_input_filepath != conll_output_filepath) # Ngừng chương trình nên input và output giống nhau
+        # Do chưa có file text nên tạo file text và lưu trong thư mục brat_original_folder, đồng thời chuẩn hoá lại file conll theo kiểu reference
         generate_reference_text_file_for_conll(conll_input_filepath, conll_output_filepath, brat_original_folder)
 
     utils.create_folder_if_not_exists(brat_output_folder)
-    conll_file = codecs.open(conll_output_filepath, 'r', 'UTF-8')
+    conll_file = codecs.open(conll_output_filepath, 'r', 'UTF-8') #file theo chuẩn conll-reference
 
     previous_token_label = 'O'
     previous_filename = ''
@@ -233,12 +244,18 @@ def conll_to_brat(conll_input_filepath, conll_output_filepath, brat_original_fol
                 # Start new entity
                 entity = token
         previous_token_label = token['label']
+    # Lưu entities tạo được từ conll xuống file brat
     output_entities(brat_output_folder, previous_filename, entities, text_filepath, text, overwrite=overwrite)
     conll_file.close()
     print('Done.')
 
 def output_brat(output_filepaths, dataset_brat_folders, stats_graph_folder, overwrite=False):
-    # Output brat files
+    '''
+    Wrapper cho hàm conll_to_brat
+    output_filepaths: {"train/valid/test/deploy": đường dẫn đến input/output conll }
+    dataset_brat_folders: {"train/valid/test/deploy": đường dẫn đến brat_original_folder }
+    stats_graph_folder: + "brat/" + "train" or "valid" or "test" or "deploy" -> brat_output_folder
+    '''
     for dataset_type in ['train', 'valid', 'test', 'deploy']:
         if dataset_type not in output_filepaths.keys():
             continue
