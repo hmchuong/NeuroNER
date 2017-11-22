@@ -54,6 +54,7 @@ def get_sentences_and_tokens_from_spacy(text, spacy_nlp):
 
 def get_stanford_annotations(text, core_nlp, port=9000, annotators='tokenize,ssplit,pos,lemma'):
     """
+    KHÔNG SỬ DỤNG
     Dùng bộ StanfordCoreNLP để phân tích câu:
 
     tokenize: Tách thành các từ
@@ -72,6 +73,9 @@ def get_stanford_annotations(text, core_nlp, port=9000, annotators='tokenize,ssp
     return output
 
 def get_sentences_and_tokens_from_stanford(text, core_nlp):
+    """
+    KHÔNG SỬ DỤNG
+    """
     stanford_output = get_stanford_annotations(text, core_nlp)
     sentences = []
     for sentence in stanford_output['sentences']:
@@ -92,7 +96,24 @@ def get_sentences_and_tokens_from_stanford(text, core_nlp):
     return sentences
 
 def get_entities_from_brat(text_filepath, annotation_filepath, verbose=False):
-    # load text
+    """
+    Lấy tuple gồm text và entities từ file text và annotation theo chuẩn brat
+    Xem ví dụ trong data/example_unannotated_texts/000-introduction.ann -> annotation_filepath
+    và data/example_unannotated_texts/000-introduction.txt -> text_filepath
+    Kết quả sẽ có dạng:
+    BRAT format có dạng: <id> <type> <start> <end> <text>
+    Lưu ý chỉ lấy annotation có id dạng T*
+    (<text>,[
+        {
+            "id":...,
+            "type": ...,
+            "start": ...,
+            "end": ...,
+            "text": ...,
+        }
+    ])
+    """
+    # Load file text lên
     with codecs.open(text_filepath, 'r', 'UTF-8') as f:
         text =f.read()
     if verbose: print("\ntext:\n{0}\n".format(text))
@@ -127,7 +148,7 @@ def get_entities_from_brat(text_filepath, annotation_filepath, verbose=False):
 
 def check_brat_annotation_and_text_compatibility(brat_folder):
     '''
-    Check if brat annotation and text files are compatible.
+    Kiểm tra thử xem 1 folder có hợp chuẩn brat không? tức là có đủ file text và annotation không
     '''
     dataset_type =  os.path.basename(brat_folder)
     print("Checking the validity of BRAT-formatted {0} set... ".format(dataset_type), end='')
@@ -143,9 +164,13 @@ def check_brat_annotation_and_text_compatibility(brat_folder):
 
 def brat_to_conll(input_folder, output_filepath, tokenizer, language):
     '''
-    Assumes '.txt' and '.ann' files are in the input_folder.
-    Checks for the compatibility between .txt and .ann at the same time.
+    input_folder: folder chứa các file output theo chuẩn brat (gồm .txt và .ann)
+    output_filepath: đường dẫn đầu ra theo chuẩn conll
+    tokenizer: string mô tả tool tokenizer sẽ sử dụng, ở đây có spacy và stanford
+    language: ngôn ngữ dùng cho việc tokenize
     '''
+
+    # Khởi tạo bộ tokenizer phù hợp
     if tokenizer == 'spacy':
         spacy_nlp = spacy.load(language)
     elif tokenizer == 'stanford':
