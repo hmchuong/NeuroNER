@@ -7,18 +7,35 @@ import utils_nlp
 import json
 from pycorenlp import StanfordCoreNLP
 
-
 def get_start_and_end_offset_of_token_from_spacy(token):
+    """
+    Lấy vị trí bắt đầu và kết thúc của token trong chuỗi
+    """
     start = token.idx
     end = start + len(token)
     return start, end
 
 def get_sentences_and_tokens_from_spacy(text, spacy_nlp):
+    """
+    Phân tích 1 đoạn văn thành cấu trúc sau:
+    [
+        // Sentence 1
+        [
+            {
+                "start": vị trí bắt đầu của token 1,
+                "end": vị trí kết thúc của token 1,
+                "text": nội dung token 1
+            },
+            ...
+        ],
+        ...
+    ]
+    """
     document = spacy_nlp(text)
     # sentences
     sentences = []
-    for span in document.sents:
-        sentence = [document[i] for i in range(span.start, span.end)]
+    for span in document.sents:     # span là object chứa các thuộc tính của 1 câu
+        sentence = [document[i] for i in range(span.start, span.end)]  # sentence lúc này là mảng chứa các object biển diễn 1 token
         sentence_tokens = []
         for token in sentence:
             token_dict = {}
@@ -28,7 +45,7 @@ def get_sentences_and_tokens_from_spacy(text, spacy_nlp):
                 continue
             # Make sure that the token text does not contain any space
             if len(token_dict['text'].split(' ')) != 1:
-                print("WARNING: the text of the token contains space character, replaced with hyphen\n\t{0}\n\t{1}".format(token_dict['text'], 
+                print("WARNING: the text of the token contains space character, replaced with hyphen\n\t{0}\n\t{1}".format(token_dict['text'],
                                                                                                                            token_dict['text'].replace(' ', '-')))
                 token_dict['text'] = token_dict['text'].replace(' ', '-')
             sentence_tokens.append(token_dict)
@@ -36,9 +53,18 @@ def get_sentences_and_tokens_from_spacy(text, spacy_nlp):
     return sentences
 
 def get_stanford_annotations(text, core_nlp, port=9000, annotators='tokenize,ssplit,pos,lemma'):
+    """
+    KHÔNG SỬ DỤNG
+    Dùng bộ StanfordCoreNLP để phân tích câu:
+
+    tokenize: Tách thành các từ
+    ssplit: Tách thành các câu
+    pos: Gán nhãn từ loại (part of speech)
+    lemma: Tra từ gốc cho các token trong văn bản
+    """
     output = core_nlp.annotate(text, properties={
         "timeout": "10000",
-        "ssplit.newlineIsSentenceBreak": "two",
+        "ssplit.newlineIsSentenceBreak": "two",             # Xác định newLine có phải là ngắt câu không? "two": 2 dòng thì mới là ngắt câu, ngoài ra còn có "always" và "never"
         'annotators': annotators,
         'outputFormat': 'json'
     })
@@ -47,6 +73,9 @@ def get_stanford_annotations(text, core_nlp, port=9000, annotators='tokenize,ssp
     return output
 
 def get_sentences_and_tokens_from_stanford(text, core_nlp):
+    """
+    KHÔNG SỬ DỤNG
+    """
     stanford_output = get_stanford_annotations(text, core_nlp)
     sentences = []
     for sentence in stanford_output['sentences']:
@@ -59,7 +88,7 @@ def get_sentences_and_tokens_from_stanford(text, core_nlp):
                 continue
             # Make sure that the token text does not contain any space
             if len(token['text'].split(' ')) != 1:
-                print("WARNING: the text of the token contains space character, replaced with hyphen\n\t{0}\n\t{1}".format(token['text'], 
+                print("WARNING: the text of the token contains space character, replaced with hyphen\n\t{0}\n\t{1}".format(token['text'],
                                                                                                                            token['text'].replace(' ', '-')))
                 token['text'] = token['text'].replace(' ', '-')
             tokens.append(token)
@@ -67,7 +96,24 @@ def get_sentences_and_tokens_from_stanford(text, core_nlp):
     return sentences
 
 def get_entities_from_brat(text_filepath, annotation_filepath, verbose=False):
-    # load text
+    """
+    Lấy tuple gồm text và entities từ file text và annotation theo chuẩn brat
+    Xem ví dụ trong data/example_unannotated_texts/done/000-introduction.ann -> annotation_filepath
+    và data/example_unannotated_texts/done/000-introduction.txt -> text_filepath
+    Kết quả sẽ có dạng:
+    BRAT format có dạng: <id> <type> <start> <end> <text>
+    Lưu ý chỉ lấy annotation có id dạng T*
+    (<text>,[
+        {
+            "id":...,
+            "type": ...,
+            "start": ...,
+            "end": ...,
+            "text": ...,
+        }
+    ])
+    """
+    # Load file text lên
     with codecs.open(text_filepath, 'r', 'UTF-8') as f:
         text =f.read()
     if verbose: print("\ntext:\n{0}\n".format(text))
@@ -97,12 +143,12 @@ def get_entities_from_brat(text_filepath, annotation_filepath, verbose=False):
                 # add to entitys data
                 entities.append(entity)
     if verbose: print("\n\n")
-    
+
     return text, entities
 
 def check_brat_annotation_and_text_compatibility(brat_folder):
     '''
-    Check if brat annotation and text files are compatible.
+    Kiểm tra thử xem 1 folder có hợp chuẩn brat không? tức là có đủ file text và annotation không
     '''
     dataset_type =  os.path.basename(brat_folder)
     print("Checking the validity of BRAT-formatted {0} set... ".format(dataset_type), end='')
@@ -118,9 +164,21 @@ def check_brat_annotation_and_text_compatibility(brat_folder):
 
 def brat_to_conll(input_folder, output_filepath, tokenizer, language):
     '''
-    Assumes '.txt' and '.ann' files are in the input_folder.
-    Checks for the compatibility between .txt and .ann at the same time.
+    Chuyển format dạng brat sang dạng conll
+    input_folder: folder chứa các file output theo chuẩn brat (gồm .txt và .ann)
+    output_filepath: đường dẫn đầu ra theo chuẩn conll
+    tokenizer: string mô tả tool tokenizer sẽ sử dụng, ở đây có spacy và stanford
+    language: ngôn ngữ dùng cho việc tokenize
+
+    Kết quả có thể xem trong file conll.txt
+    format chung của output là: <token> <filename> <start index> <end index> <label>
+    Label:
+        - 0: không phải entity
+            - I-*: entity chưa hoàn thiện gồm nhiều token, cần ghép các entity dạng I-* gần nhau lại mới được dạng B-*
+        - B-*: entity đã hoàn thiện, chỉ gồm 1 token
     '''
+
+    # Khởi tạo bộ tokenizer phù hợp
     if tokenizer == 'spacy':
         spacy_nlp = spacy.load(language)
     elif tokenizer == 'stanford':
@@ -130,29 +188,30 @@ def brat_to_conll(input_folder, output_filepath, tokenizer, language):
     verbose = False
     dataset_type =  os.path.basename(input_folder)
     print("Formatting {0} set from BRAT to CONLL... ".format(dataset_type), end='')
-    text_filepaths = sorted(glob.glob(os.path.join(input_folder, '*.txt')))
+    text_filepaths = sorted(glob.glob(os.path.join(input_folder, '*.txt')))         # Toàn bộ đường dẫn file text
     output_file = codecs.open(output_filepath, 'w', 'utf-8')
     for text_filepath in text_filepaths:
         base_filename = os.path.splitext(os.path.basename(text_filepath))[0]
         annotation_filepath = os.path.join(os.path.dirname(text_filepath), base_filename + '.ann')
-        # create annotation file if it does not exist
+        # Tạo ann file nếu chưa có
         if not os.path.exists(annotation_filepath):
             codecs.open(annotation_filepath, 'w', 'UTF-8').close()
 
         text, entities = get_entities_from_brat(text_filepath, annotation_filepath)
         entities = sorted(entities, key=lambda entity:entity["start"])
-        
+
         if tokenizer == 'spacy':
             sentences = get_sentences_and_tokens_from_spacy(text, spacy_nlp)
         elif tokenizer == 'stanford':
             sentences = get_sentences_and_tokens_from_stanford(text, core_nlp)
-        
+
         for sentence in sentences:
             inside = False
             previous_token_label = 'O'
             for token in sentence:
                 token['label'] = 'O'
                 for entity in entities:
+                    # Nếu token và entity giao nhau nhau thì gắn nhãn cho token
                     if entity['start'] <= token['start'] < entity['end'] or \
                        entity['start'] < token['end'] <= entity['end'] or \
                        token['start'] < entity['start'] < entity['end'] < token['end']:
@@ -160,15 +219,15 @@ def brat_to_conll(input_folder, output_filepath, tokenizer, language):
                         token['label'] = entity['type'].replace('-', '_') # Because the ANN doesn't support tag with '-' in it
 
                         break
-                    elif token['end'] < entity['start']:
+                    elif token['end'] < entity['start']:  # Điều kiện dừng khi không kiếm được entity
                         break
-                        
+                # entity: là entity hiện tại sau vòng lặp
                 if len(entities) == 0:
                     entity={'end':0}
-                if token['label'] == 'O':
+                if token['label'] == 'O':   # Không có entity ứng với token
                     gold_label = 'O'
                     inside = False
-                elif inside and token['label'] == previous_token_label:
+                elif inside and token['label'] == previous_token_label: #
                     gold_label = 'I-{0}'.format(token['label'])
                 else:
                     inside = True

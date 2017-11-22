@@ -5,4 +5,7 @@
 *.project
 *.pydevproject
 output/*
-data/*
+data/wordword_vectors
+roles.txt
+commit_docker.txt
+trained_models/*
