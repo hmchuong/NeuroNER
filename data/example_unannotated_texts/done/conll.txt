@@ -1,0 +1,962 @@
+Welcome 000-introduction 0 7 O
+to 000-introduction 8 10 O
+the 000-introduction 11 14 O
+Brat 000-introduction 15 19 O
+Rapid 000-introduction 20 25 O
+Annotation 000-introduction 26 36 O
+Tool 000-introduction 37 41 O
+( 000-introduction 42 43 O
+brat 000-introduction 43 47 O
+) 000-introduction 47 48 O
+tutorial 000-introduction 49 57 O
+! 000-introduction 57 58 O
+
+brat 000-introduction 60 64 O
+is 000-introduction 65 67 O
+a 000-introduction 68 69 O
+web 000-introduction 70 73 O
+- 000-introduction 73 74 O
+based 000-introduction 74 79 O
+tool 000-introduction 80 84 O
+for 000-introduction 85 88 O
+structured 000-introduction 89 99 O
+text 000-introduction 100 104 O
+annotation 000-introduction 105 115 O
+and 000-introduction 116 119 O
+visualization 000-introduction 120 133 O
+. 000-introduction 133 134 O
+
+The 000-introduction 135 138 O
+easiest 000-introduction 139 146 O
+way 000-introduction 147 150 O
+to 000-introduction 151 153 O
+explain 000-introduction 154 161 O
+what 000-introduction 162 166 O
+this 000-introduction 167 171 O
+means 000-introduction 172 177 O
+is 000-introduction 178 180 O
+by 000-introduction 181 183 O
+example 000-introduction 184 191 O
+: 000-introduction 191 192 O
+see 000-introduction 193 196 O
+the 000-introduction 197 200 O
+following 000-introduction 201 210 O
+sentence 000-introduction 211 219 O
+illustrating 000-introduction 220 232 O
+various 000-introduction 233 240 O
+types 000-introduction 241 246 O
+of 000-introduction 247 249 O
+annotation 000-introduction 250 260 O
+. 000-introduction 260 261 O
+
+Take 000-introduction 262 266 O
+a 000-introduction 267 268 O
+moment 000-introduction 269 275 O
+to 000-introduction 276 278 O
+study 000-introduction 279 284 O
+this 000-introduction 285 289 O
+example 000-introduction 290 297 O
+, 000-introduction 297 298 O
+moving 000-introduction 299 305 O
+your 000-introduction 306 310 O
+mouse 000-introduction 311 316 O
+cursor 000-introduction 317 323 O
+over 000-introduction 324 328 O
+some 000-introduction 329 333 O
+of 000-introduction 334 336 O
+the 000-introduction 337 340 O
+annotations 000-introduction 341 352 O
+. 000-introduction 352 353 O
+
+Hold 000-introduction 354 358 O
+the 000-introduction 359 362 O
+cursor 000-introduction 363 369 O
+still 000-introduction 370 375 O
+over 000-introduction 376 380 O
+an 000-introduction 381 383 O
+annotation 000-introduction 384 394 O
+for 000-introduction 395 398 O
+more 000-introduction 399 403 O
+detail 000-introduction 404 410 O
+. 000-introduction 410 411 O
+
+1 000-introduction 414 415 O
+) 000-introduction 416 417 O
+Citibank 000-introduction 418 426 B-Organization
+was 000-introduction 427 430 O
+involved 000-introduction 431 439 O
+in 000-introduction 440 442 O
+moving 000-introduction 443 449 B-Transfer_money
+about 000-introduction 450 455 O
+$ 000-introduction 456 457 B-Money
+100 000-introduction 457 460 I-Money
+million 000-introduction 461 468 I-Money
+for 000-introduction 469 472 O
+Raul 000-introduction 473 477 B-Person
+Salinas 000-introduction 478 485 I-Person
+de 000-introduction 486 488 I-Person
+Gortari 000-introduction 489 496 I-Person
+, 000-introduction 496 497 O
+brother 000-introduction 498 505 O
+of 000-introduction 506 508 O
+a 000-introduction 509 510 O
+former 000-introduction 511 517 B-Person
+Mexican 000-introduction 518 525 I-Person
+president 000-introduction 526 535 I-Person
+, 000-introduction 535 536 O
+to 000-introduction 537 539 O
+banks 000-introduction 540 545 B-Organization
+in 000-introduction 546 548 O
+Switzerland 000-introduction 549 560 B-GPE
+. 000-introduction 560 561 O
+
+If 000-introduction 564 566 O
+this 000-introduction 567 571 O
+example 000-introduction 572 579 O
+seems 000-introduction 580 585 O
+complicated 000-introduction 586 597 O
+, 000-introduction 597 598 O
+do 000-introduction 599 601 O
+n't 000-introduction 601 604 O
+panic 000-introduction 605 610 O
+! 000-introduction 610 611 O
+
+This 000-introduction 612 616 O
+tutorial 000-introduction 617 625 O
+will 000-introduction 626 630 O
+present 000-introduction 631 638 O
+the 000-introduction 639 642 O
+key 000-introduction 643 646 O
+features 000-introduction 647 655 O
+of 000-introduction 656 658 O
+brat 000-introduction 659 663 O
+interactively 000-introduction 664 677 O
+, 000-introduction 677 678 O
+with 000-introduction 679 683 O
+each 000-introduction 684 688 O
+document 000-introduction 689 697 O
+presenting 000-introduction 698 708 O
+one 000-introduction 709 712 O
+or 000-introduction 713 715 O
+a 000-introduction 716 717 O
+few 000-introduction 718 721 O
+features 000-introduction 722 730 O
+. 000-introduction 730 731 O
+
+If 000-introduction 732 734 O
+you 000-introduction 735 738 O
+follow 000-introduction 739 745 O
+this 000-introduction 746 750 O
+brief 000-introduction 751 756 O
+tutorial 000-introduction 757 765 O
+, 000-introduction 765 766 O
+you 000-introduction 767 770 O
+'ll 000-introduction 770 773 O
+be 000-introduction 774 776 O
+able 000-introduction 777 781 O
+to 000-introduction 782 784 O
+understand 000-introduction 785 795 O
+and 000-introduction 796 799 O
+create 000-introduction 800 806 O
+annotations 000-introduction 807 818 O
+such 000-introduction 819 823 O
+as 000-introduction 824 826 O
+those 000-introduction 827 832 O
+above 000-introduction 833 838 O
+in 000-introduction 839 841 O
+no 000-introduction 842 844 O
+time 000-introduction 845 849 O
+. 000-introduction 849 850 O
+
+Try 000-introduction 852 855 O
+moving 000-introduction 856 862 O
+to 000-introduction 863 865 O
+the 000-introduction 866 869 O
+next 000-introduction 870 874 O
+document 000-introduction 875 883 O
+now 000-introduction 884 887 O
+by 000-introduction 888 890 O
+clicking 000-introduction 891 899 O
+on 000-introduction 900 902 O
+the 000-introduction 903 906 O
+arrow 000-introduction 907 912 O
+to 000-introduction 913 915 O
+the 000-introduction 916 919 O
+right 000-introduction 920 925 O
+on 000-introduction 926 928 O
+the 000-introduction 929 932 O
+blue 000-introduction 933 937 O
+bar 000-introduction 938 941 O
+at 000-introduction 942 944 O
+the 000-introduction 945 948 O
+top 000-introduction 949 952 O
+left 000-introduction 953 957 O
+corner 000-introduction 958 964 O
+of 000-introduction 965 967 O
+the 000-introduction 968 971 O
+page 000-introduction 972 976 O
+. 000-introduction 976 977 O
+
+Welcome conll 0 7 O
+000-introduction conll 8 24 O
+0 conll 25 26 O
+
+7 conll 27 28 O
+O conll 29 30 O
+to conll 31 33 O
+000-introduction conll 34 50 O
+8 conll 51 52 O
+
+10 conll 53 55 O
+O conll 56 57 O
+
+the conll 58 61 O
+000-introduction conll 62 78 O
+11 conll 79 81 O
+14 conll 82 84 O
+O conll 85 86 O
+Brat conll 87 91 O
+000-introduction conll 92 108 O
+15 conll 109 111 O
+19 conll 112 114 O
+O conll 115 116 O
+Rapid conll 117 122 O
+000-introduction conll 123 139 O
+20 conll 140 142 O
+25 conll 143 145 O
+O conll 146 147 O
+Annotation conll 148 158 O
+000-introduction conll 159 175 O
+
+26 conll 176 178 O
+
+36 conll 179 181 O
+O conll 182 183 O
+Tool conll 184 188 O
+000-introduction conll 189 205 O
+
+37 conll 206 208 O
+41 conll 209 211 O
+O conll 212 213 O
+
+( conll 214 215 O
+000-introduction conll 216 232 O
+42 conll 233 235 O
+43 conll 236 238 O
+O conll 239 240 O
+brat conll 241 245 O
+000-introduction conll 246 262 O
+
+43 conll 263 265 O
+47 conll 266 268 O
+O conll 269 270 O
+) conll 271 272 O
+
+000-introduction conll 273 289 O
+
+47 conll 290 292 O
+48 conll 293 295 O
+O conll 296 297 O
+tutorial conll 298 306 O
+000-introduction conll 307 323 O
+
+49 conll 324 326 O
+57 conll 327 329 O
+O conll 330 331 O
+
+! conll 332 333 O
+000-introduction conll 334 350 O
+
+57 conll 351 353 O
+58 conll 354 356 O
+O conll 357 358 O
+brat conll 360 364 O
+000-introduction conll 365 381 O
+60 conll 382 384 O
+
+64 conll 385 387 O
+O conll 388 389 O
+is conll 390 392 O
+000-introduction conll 393 409 O
+65 conll 410 412 O
+67 conll 413 415 O
+O conll 416 417 O
+
+a conll 418 419 O
+000-introduction conll 420 436 O
+68 conll 437 439 O
+69 conll 440 442 O
+O conll 443 444 O
+web conll 445 448 O
+000-introduction conll 449 465 O
+70 conll 466 468 O
+73 conll 469 471 O
+O conll 472 473 O
+- conll 474 475 O
+000-introduction conll 476 492 O
+73 conll 493 495 O
+74 conll 496 498 O
+O conll 499 500 O
+based conll 501 506 O
+000-introduction conll 507 523 O
+74 conll 524 526 O
+79 conll 527 529 O
+O conll 530 531 O
+tool conll 532 536 O
+
+000-introduction conll 537 553 O
+
+80 conll 554 556 O
+
+84 conll 557 559 O
+O conll 560 561 O
+for conll 562 565 O
+000-introduction conll 566 582 O
+85 conll 583 585 O
+88 conll 586 588 O
+O conll 589 590 O
+
+structured conll 591 601 O
+000-introduction conll 602 618 O
+89 conll 619 621 O
+99 conll 622 624 O
+O conll 625 626 O
+text conll 627 631 O
+000-introduction conll 632 648 O
+
+100 conll 649 652 O
+104 conll 653 656 O
+O conll 657 658 O
+annotation conll 659 669 O
+
+000-introduction conll 670 686 O
+105 conll 687 690 O
+115 conll 691 694 O
+O conll 695 696 O
+and conll 697 700 O
+000-introduction conll 701 717 O
+116 conll 718 721 O
+119 conll 722 725 O
+
+O conll 726 727 O
+visualization conll 728 741 O
+000-introduction conll 742 758 O
+
+120 conll 759 762 O
+133 conll 763 766 O
+O conll 767 768 O
+
+. conll 769 770 O
+000-introduction conll 771 787 O
+
+133 conll 788 791 O
+
+134 conll 792 795 O
+O conll 796 797 O
+
+The conll 799 802 O
+000-introduction conll 803 819 O
+135 conll 820 823 O
+138 conll 824 827 O
+O conll 828 829 O
+easiest conll 830 837 O
+000-introduction conll 838 854 O
+139 conll 855 858 O
+146 conll 859 862 O
+O conll 863 864 O
+way conll 865 868 O
+000-introduction conll 869 885 O
+
+147 conll 886 889 O
+150 conll 890 893 O
+O conll 894 895 O
+to conll 896 898 O
+000-introduction conll 899 915 O
+
+151 conll 916 919 O
+153 conll 920 923 O
+O conll 924 925 O
+explain conll 926 933 O
+000-introduction conll 934 950 O
+
+154 conll 951 954 O
+161 conll 955 958 O
+O conll 959 960 O
+
+what conll 961 965 O
+000-introduction conll 966 982 O
+162 conll 983 986 O
+166 conll 987 990 O
+O conll 991 992 O
+this conll 993 997 O
+
+000-introduction conll 998 1014 O
+167 conll 1015 1018 O
+171 conll 1019 1022 O
+O conll 1023 1024 O
+means conll 1025 1030 O
+000-introduction conll 1031 1047 O
+
+172 conll 1048 1051 O
+177 conll 1052 1055 O
+O conll 1056 1057 O
+is conll 1058 1060 O
+000-introduction conll 1061 1077 O
+
+178 conll 1078 1081 O
+180 conll 1082 1085 O
+O conll 1086 1087 O
+by conll 1088 1090 O
+000-introduction conll 1091 1107 O
+
+181 conll 1108 1111 O
+183 conll 1112 1115 O
+O conll 1116 1117 O
+example conll 1118 1125 O
+000-introduction conll 1126 1142 O
+184 conll 1143 1146 O
+191 conll 1147 1150 O
+O conll 1151 1152 O
+: conll 1153 1154 O
+000-introduction conll 1155 1171 O
+191 conll 1172 1175 O
+192 conll 1176 1179 O
+O conll 1180 1181 O
+
+see conll 1182 1185 O
+000-introduction conll 1186 1202 O
+193 conll 1203 1206 O
+196 conll 1207 1210 O
+O conll 1211 1212 O
+the conll 1213 1216 O
+000-introduction conll 1217 1233 O
+197 conll 1234 1237 O
+200 conll 1238 1241 O
+O conll 1242 1243 O
+following conll 1244 1253 O
+000-introduction conll 1254 1270 O
+201 conll 1271 1274 O
+210 conll 1275 1278 O
+O conll 1279 1280 O
+sentence conll 1281 1289 O
+000-introduction conll 1290 1306 O
+
+211 conll 1307 1310 O
+219 conll 1311 1314 O
+O conll 1315 1316 O
+illustrating conll 1317 1329 O
+000-introduction conll 1330 1346 O
+
+220 conll 1347 1350 O
+232 conll 1351 1354 O
+O conll 1355 1356 O
+various conll 1357 1364 O
+000-introduction conll 1365 1381 O
+233 conll 1382 1385 O
+240 conll 1386 1389 O
+O conll 1390 1391 O
+types conll 1392 1397 O
+000-introduction conll 1398 1414 O
+
+241 conll 1415 1418 O
+246 conll 1419 1422 O
+O conll 1423 1424 O
+of conll 1425 1427 O
+000-introduction conll 1428 1444 O
+247 conll 1445 1448 O
+249 conll 1449 1452 O
+O conll 1453 1454 O
+annotation conll 1455 1465 O
+000-introduction conll 1466 1482 O
+
+250 conll 1483 1486 O
+260 conll 1487 1490 O
+O conll 1491 1492 O
+
+. conll 1493 1494 O
+000-introduction conll 1495 1511 O
+
+260 conll 1512 1515 O
+261 conll 1516 1519 O
+O conll 1520 1521 O
+Take conll 1523 1527 O
+000-introduction conll 1528 1544 O
+262 conll 1545 1548 O
+266 conll 1549 1552 O
+O conll 1553 1554 O
+a conll 1555 1556 O
+000-introduction conll 1557 1573 O
+267 conll 1574 1577 O
+268 conll 1578 1581 O
+O conll 1582 1583 O
+moment conll 1584 1590 O
+000-introduction conll 1591 1607 O
+269 conll 1608 1611 O
+275 conll 1612 1615 O
+O conll 1616 1617 O
+to conll 1618 1620 O
+000-introduction conll 1621 1637 O
+
+276 conll 1638 1641 O
+278 conll 1642 1645 O
+O conll 1646 1647 O
+study conll 1648 1653 O
+000-introduction conll 1654 1670 O
+
+279 conll 1671 1674 O
+284 conll 1675 1678 O
+
+O conll 1679 1680 O
+this conll 1681 1685 O
+
+000-introduction conll 1686 1702 O
+285 conll 1703 1706 O
+289 conll 1707 1710 O
+O conll 1711 1712 O
+example conll 1713 1720 O
+000-introduction conll 1721 1737 O
+
+290 conll 1738 1741 O
+297 conll 1742 1745 O
+O conll 1746 1747 O
+, conll 1748 1749 O
+000-introduction conll 1750 1766 O
+
+297 conll 1767 1770 O
+298 conll 1771 1774 O
+O conll 1775 1776 O
+moving conll 1777 1783 O
+000-introduction conll 1784 1800 O
+
+299 conll 1801 1804 O
+
+305 conll 1805 1808 O
+O conll 1809 1810 O
+your conll 1811 1815 O
+000-introduction conll 1816 1832 O
+306 conll 1833 1836 O
+310 conll 1837 1840 O
+O conll 1841 1842 O
+mouse conll 1843 1848 O
+000-introduction conll 1849 1865 O
+
+311 conll 1866 1869 O
+316 conll 1870 1873 O
+O conll 1874 1875 O
+cursor conll 1876 1882 O
+000-introduction conll 1883 1899 O
+
+317 conll 1900 1903 O
+323 conll 1904 1907 O
+O conll 1908 1909 O
+
+over conll 1910 1914 O
+000-introduction conll 1915 1931 O
+324 conll 1932 1935 O
+328 conll 1936 1939 O
+O conll 1940 1941 O
+some conll 1942 1946 O
+000-introduction conll 1947 1963 O
+329 conll 1964 1967 O
+333 conll 1968 1971 O
+O conll 1972 1973 O
+of conll 1974 1976 O
+000-introduction conll 1977 1993 O
+334 conll 1994 1997 O
+
+336 conll 1998 2001 O
+O conll 2002 2003 O
+the conll 2004 2007 O
+000-introduction conll 2008 2024 O
+337 conll 2025 2028 O
+340 conll 2029 2032 O
+O conll 2033 2034 O
+annotations conll 2035 2046 O
+000-introduction conll 2047 2063 O
+341 conll 2064 2067 O
+352 conll 2068 2071 O
+O conll 2072 2073 O
+. conll 2074 2075 O
+000-introduction conll 2076 2092 O
+352 conll 2093 2096 O
+353 conll 2097 2100 O
+O conll 2101 2102 O
+Hold conll 2104 2108 O
+000-introduction conll 2109 2125 O
+
+354 conll 2126 2129 O
+358 conll 2130 2133 O
+O conll 2134 2135 O
+
+the conll 2136 2139 O
+000-introduction conll 2140 2156 O
+359 conll 2157 2160 O
+362 conll 2161 2164 O
+
+O conll 2165 2166 O
+cursor conll 2167 2173 O
+000-introduction conll 2174 2190 O
+
+363 conll 2191 2194 O
+369 conll 2195 2198 O
+O conll 2199 2200 O
+still conll 2201 2206 O
+000-introduction conll 2207 2223 O
+
+370 conll 2224 2227 O
+
+375 conll 2228 2231 O
+O conll 2232 2233 O
+
+over conll 2234 2238 O
+000-introduction conll 2239 2255 O
+376 conll 2256 2259 O
+380 conll 2260 2263 O
+O conll 2264 2265 O
+an conll 2266 2268 O
+000-introduction conll 2269 2285 O
+381 conll 2286 2289 O
+383 conll 2290 2293 O
+O conll 2294 2295 O
+annotation conll 2296 2306 O
+000-introduction conll 2307 2323 O
+
+384 conll 2324 2327 O
+394 conll 2328 2331 O
+O conll 2332 2333 O
+for conll 2334 2337 O
+000-introduction conll 2338 2354 O
+395 conll 2355 2358 O
+398 conll 2359 2362 O
+O conll 2363 2364 O
+more conll 2365 2369 O
+000-introduction conll 2370 2386 O
+399 conll 2387 2390 O
+403 conll 2391 2394 O
+O conll 2395 2396 O
+detail conll 2397 2403 O
+000-introduction conll 2404 2420 O
+
+404 conll 2421 2424 O
+410 conll 2425 2428 O
+O conll 2429 2430 O
+
+. conll 2431 2432 O
+000-introduction conll 2433 2449 O
+
+410 conll 2450 2453 O
+
+411 conll 2454 2457 O
+O conll 2458 2459 O
+1 conll 2461 2462 O
+000-introduction conll 2463 2479 O
+414 conll 2480 2483 O
+415 conll 2484 2487 O
+O conll 2488 2489 O
+) conll 2490 2491 O
+000-introduction conll 2492 2508 O
+416 conll 2509 2512 O
+417 conll 2513 2516 O
+O conll 2517 2518 O
+Citibank conll 2519 2527 O
+000-introduction conll 2528 2544 O
+
+418 conll 2545 2548 O
+426 conll 2549 2552 O
+B conll 2553 2554 O
+- conll 2554 2555 O
+Organization conll 2555 2567 O
+was conll 2568 2571 O
+000-introduction conll 2572 2588 O
+427 conll 2589 2592 O
+430 conll 2593 2596 O
+O conll 2597 2598 O
+involved conll 2599 2607 O
+000-introduction conll 2608 2624 O
+431 conll 2625 2628 O
+439 conll 2629 2632 O
+O conll 2633 2634 O
+in conll 2635 2637 O
+000-introduction conll 2638 2654 O
+440 conll 2655 2658 O
+
+442 conll 2659 2662 O
+O conll 2663 2664 O
+moving conll 2665 2671 O
+000-introduction conll 2672 2688 O
+
+443 conll 2689 2692 O
+449 conll 2693 2696 O
+B conll 2697 2698 O
+- conll 2698 2699 O
+
+Transfer_money conll 2699 2713 O
+about conll 2714 2719 O
+000-introduction conll 2720 2736 O
+450 conll 2737 2740 O
+455 conll 2741 2744 O
+O conll 2745 2746 O
+$ conll 2747 2748 O
+000-introduction conll 2749 2765 O
+456 conll 2766 2769 O
+457 conll 2770 2773 O
+B conll 2774 2775 O
+- conll 2775 2776 O
+Money conll 2776 2781 O
+
+100 conll 2782 2785 O
+000-introduction conll 2786 2802 O
+
+457 conll 2803 2806 O
+460 conll 2807 2810 O
+I conll 2811 2812 O
+- conll 2812 2813 O
+Money conll 2813 2818 O
+
+million conll 2819 2826 O
+000-introduction conll 2827 2843 O
+
+461 conll 2844 2847 O
+468 conll 2848 2851 O
+
+I conll 2852 2853 O
+- conll 2853 2854 O
+Money conll 2854 2859 O
+for conll 2860 2863 O
+000-introduction conll 2864 2880 O
+
+469 conll 2881 2884 O
+472 conll 2885 2888 O
+O conll 2889 2890 O
+Raul conll 2891 2895 O
+000-introduction conll 2896 2912 O
+
+473 conll 2913 2916 O
+477 conll 2917 2920 O
+B conll 2921 2922 O
+- conll 2922 2923 O
+Person conll 2923 2929 O
+Salinas conll 2930 2937 O
+000-introduction conll 2938 2954 O
+
+478 conll 2955 2958 O
+485 conll 2959 2962 O
+I conll 2963 2964 O
+- conll 2964 2965 O
+Person conll 2965 2971 O
+de conll 2972 2974 O
+000-introduction conll 2975 2991 O
+486 conll 2992 2995 O
+488 conll 2996 2999 O
+
+I conll 3000 3001 O
+- conll 3001 3002 O
+Person conll 3002 3008 O
+Gortari conll 3009 3016 O
+000-introduction conll 3017 3033 O
+
+489 conll 3034 3037 O
+496 conll 3038 3041 O
+I conll 3042 3043 O
+- conll 3043 3044 O
+Person conll 3044 3050 O
+, conll 3051 3052 O
+000-introduction conll 3053 3069 O
+
+496 conll 3070 3073 O
+497 conll 3074 3077 O
+O conll 3078 3079 O
+brother conll 3080 3087 O
+000-introduction conll 3088 3104 O
+498 conll 3105 3108 O
+505 conll 3109 3112 O
+O conll 3113 3114 O
+of conll 3115 3117 O
+000-introduction conll 3118 3134 O
+506 conll 3135 3138 O
+508 conll 3139 3142 O
+O conll 3143 3144 O
+a conll 3145 3146 O
+000-introduction conll 3147 3163 O
+509 conll 3164 3167 O
+510 conll 3168 3171 O
+O conll 3172 3173 O
+
+former conll 3174 3180 O
+000-introduction conll 3181 3197 O
+511 conll 3198 3201 O
+517 conll 3202 3205 O
+B conll 3206 3207 O
+- conll 3207 3208 O
+Person conll 3208 3214 O
+Mexican conll 3215 3222 O
+000-introduction conll 3223 3239 O
+
+518 conll 3240 3243 O
+525 conll 3244 3247 O
+I conll 3248 3249 O
+- conll 3249 3250 O
+Person conll 3250 3256 O
+president conll 3257 3266 O
+000-introduction conll 3267 3283 O
+
+526 conll 3284 3287 O
+535 conll 3288 3291 O
+I conll 3292 3293 O
+- conll 3293 3294 O
+Person conll 3294 3300 O
+, conll 3301 3302 O
+
+000-introduction conll 3303 3319 O
+535 conll 3320 3323 O
+536 conll 3324 3327 O
+O conll 3328 3329 O
+to conll 3330 3332 O
+000-introduction conll 3333 3349 O
+
+537 conll 3350 3353 O
+539 conll 3354 3357 O
+O conll 3358 3359 O
+banks conll 3360 3365 O
+000-introduction conll 3366 3382 O
+
+540 conll 3383 3386 O
+545 conll 3387 3390 O
+B conll 3391 3392 O
+- conll 3392 3393 O
+Organization conll 3393 3405 O
+in conll 3406 3408 O
+000-introduction conll 3409 3425 O
+
+546 conll 3426 3429 O
+548 conll 3430 3433 O
+O conll 3434 3435 O
+Switzerland conll 3436 3447 O
+000-introduction conll 3448 3464 O
+
+549 conll 3465 3468 O
+560 conll 3469 3472 O
+B conll 3473 3474 O
+- conll 3474 3475 O
+GPE conll 3475 3478 O
+. conll 3479 3480 O
+
+000-introduction conll 3481 3497 O
+
+560 conll 3498 3501 O
+
+561 conll 3502 3505 O
+O conll 3506 3507 O
+
+If conll 3509 3511 O
+000-introduction conll 3512 3528 O
+564 conll 3529 3532 O
+566 conll 3533 3536 O
+O conll 3537 3538 O
+this conll 3539 3543 O
+000-introduction conll 3544 3560 O
+
+567 conll 3561 3564 O
+571 conll 3565 3568 O
+O conll 3569 3570 O
+example conll 3571 3578 O
+000-introduction conll 3579 3595 O
+
+572 conll 3596 3599 O
+579 conll 3600 3603 O
+O conll 3604 3605 O
+seems conll 3606 3611 O
+000-introduction conll 3612 3628 O
+580 conll 3629 3632 O
+585 conll 3633 3636 O
+O conll 3637 3638 O
+
+complicated conll 3639 3650 O
+000-introduction conll 3651 3667 O
+586 conll 3668 3671 O
+597 conll 3672 3675 O
+O conll 3676 3677 O
+
+, conll 3678 3679 O
+000-introduction conll 3680 3696 O
+597 conll 3697 3700 O
+598 conll 3701 3704 O
+O conll 3705 3706 O
+do conll 3707 3709 O
+000-introduction conll 3710 3726 O
+
+599 conll 3727 3730 O
+
+601 conll 3731 3734 O
+O conll 3735 3736 O
+n't conll 3737 3740 O
+000-introduction conll 3741 3757 O
+601 conll 3758 3761 O
+604 conll 3762 3765 O
+
+O conll 3766 3767 O
+panic conll 3768 3773 O
+000-introduction conll 3774 3790 O
+
+605 conll 3791 3794 O
+610 conll 3795 3798 O
+O conll 3799 3800 O
+
+! conll 3801 3802 O
+000-introduction conll 3803 3819 O
+
+610 conll 3820 3823 O
+611 conll 3824 3827 O
+O conll 3828 3829 O
+
+This conll 3831 3835 O
+000-introduction conll 3836 3852 O
+
+612 conll 3853 3856 O
+616 conll 3857 3860 O
+O conll 3861 3862 O
+tutorial conll 3863 3871 O
+
+000-introduction conll 3872 3888 O
+
+617 conll 3889 3892 O
+625 conll 3893 3896 O
+O conll 3897 3898 O
+
+will conll 3899 3903 O
+000-introduction conll 3904 3920 O
+
+626 conll 3921 3924 O
+
+630 conll 3925 3928 O
+O conll 3929 3930 O
+present conll 3931 3938 O
+000-introduction conll 3939 3955 O
+
+631 conll 3956 3959 O
+
+638 conll 3960 3963 O
+O conll 3964 3965 O
+the conll 3966 3969 O
+
+000-introduction conll 3970 3986 O
+639 conll 3987 3990 O
+642 conll 3991 3994 O
+O conll 3995 3996 O
+key conll 3997 4000 O
+000-introduction conll 4001 4017 O
+643 conll 4018 4021 O
+646 conll 4022 4025 O
+O conll 4026 4027 O
+features conll 4028 4036 O
+000-introduction conll 4037 4053 O
+
+647 conll 4054 4057 O
+655 conll 4058 4061 O
+O conll 4062 4063 O
+of conll 4064 4066 O
+000-introduction conll 4067 4083 O
+656 conll 4084 4087 O
+658 conll 4088 4091 O
+O conll 4092 4093 O
+
