@@ -35,7 +35,11 @@ class NeuroNER(object):
     prediction_count = 0
 
     def _create_stats_graph_folder(self, parameters):
-        # Initialize stats_graph_folder
+        '''
+        Tạo folder output/en để chứa các file sinh ra trong quá trình huấn luyện
+        Trả về
+        (đường dẫn đến folder output, timestamp của lần chạy)
+        '''
         experiment_timestamp = utils.get_current_time_in_miliseconds()
         dataset_name = utils.get_basename_without_extension(parameters['dataset_text_folder'])
         model_name = '{0}_{1}'.format(dataset_name, experiment_timestamp)
@@ -307,21 +311,27 @@ class NeuroNER(object):
             sess.run(tf.global_variables_initializer())
             if not parameters['use_pretrained_model']:
                 model.load_pretrained_token_embeddings(sess, dataset, parameters, token_to_vector)
+                '''
+                unique_labels: các nhãn entity độc lập trong dataset hiện có (conll)
+                '''
                 self.transition_params_trained = np.random.rand(len(dataset.unique_labels)+2,len(dataset.unique_labels)+2)
             else:
                 self.transition_params_trained = model.restore_from_pretrained_model(parameters, dataset, sess, token_to_vector=token_to_vector)
             del token_to_vector
-
-        self.dataset = dataset
-        self.dataset_brat_folders = dataset_brat_folders
-        self.dataset_filepaths = dataset_filepaths
-        self.model = model
-        self.parameters = parameters
-        self.conf_parameters = conf_parameters
-        self.sess = sess
+        # TODO: Cần tìm hiểu ý nghĩa của transition_params_trained
+        self.dataset = dataset                              # quản lý dataset <Dataset>
+        self.dataset_brat_folders = dataset_brat_folders    # Folder data dạng brat <dict>
+        self.dataset_filepaths = dataset_filepaths          # đường dẫn các file conll data <dict>
+        self.model = model                                  # model huấn luyện <EntityLSTM>
+        self.parameters = parameters                        # Các parameters
+        self.conf_parameters = conf_parameters              # Các paramters config dùng cho Tensorflow
+        self.sess = sess                                    # session chạy của tensorflow
 
 
     def fit(self):
+        '''
+        Dùng để train data
+        '''
         parameters = self.parameters
         conf_parameters = self.conf_parameters
         dataset_filepaths = self.dataset_filepaths
@@ -332,37 +342,44 @@ class NeuroNER(object):
         transition_params_trained = self.transition_params_trained
         stats_graph_folder, experiment_timestamp = self._create_stats_graph_folder(parameters)
 
-        # Initialize and save execution details
+        # Khởi tạo và lưu các thông tin của lần chạy
         start_time = time.time()
         results = {}
         results['epoch'] = {}
+        '''
+        An epoch, in Machine Learning, is the entire processing by the learning algorithm of the entire train-set.
+        Ex:
+        The MNIST train set is composed by 55000 samples. Once the algorithm processed all those 55000 samples an epoch is passed.
+        '''
         results['execution_details'] = {}
-        results['execution_details']['train_start'] = start_time
-        results['execution_details']['time_stamp'] = experiment_timestamp
-        results['execution_details']['early_stop'] = False
-        results['execution_details']['keyboard_interrupt'] = False
-        results['execution_details']['num_epochs'] = 0
-        results['model_options'] = copy.copy(parameters)
+        results['execution_details']['train_start'] = start_time                # Thời gian bắt đầu chạy
+        results['execution_details']['time_stamp'] = experiment_timestamp       # Nhãn thời gian
+        results['execution_details']['early_stop'] = False                      # Cho biết có lỗi xảy ra nên bị dừng sớm ko
+        results['execution_details']['keyboard_interrupt'] = False              # Cho biết có bị dừng bởi keyboard
+        results['execution_details']['num_epochs'] = 0                          # Số lượng epoch đã chạy
+        results['model_options'] = copy.copy(parameters)                        # Các tham số
 
-        model_folder = os.path.join(stats_graph_folder, 'model')
+        model_folder = os.path.join(stats_graph_folder, 'model')                # output/en.../model
         utils.create_folder_if_not_exists(model_folder)
         with open(os.path.join(model_folder, 'parameters.ini'), 'w') as parameters_file:
-            conf_parameters.write(parameters_file)
-        pickle.dump(dataset, open(os.path.join(model_folder, 'dataset.pickle'), 'wb'))
+            conf_parameters.write(parameters_file)                                          # Log các tham số ra file
+        pickle.dump(dataset, open(os.path.join(model_folder, 'dataset.pickle'), 'wb'))      # Dump dataset thành pickle file để lần sau chạy
 
-        tensorboard_log_folder = os.path.join(stats_graph_folder, 'tensorboard_logs')
+        # Tạo folder tensorboard logs để dùng cho việc vẽ biểu đồ sau này
+        tensorboard_log_folder = os.path.join(stats_graph_folder, 'tensorboard_logs')       # folder lưu file log của tensorboard -> dùng cho việc plot biểu đồ lên
         utils.create_folder_if_not_exists(tensorboard_log_folder)
         tensorboard_log_folders = {}
         for dataset_type in dataset_filepaths.keys():
             tensorboard_log_folders[dataset_type] = os.path.join(stats_graph_folder, 'tensorboard_logs', dataset_type)
             utils.create_folder_if_not_exists(tensorboard_log_folders[dataset_type])
 
-        # Instantiate the writers for TensorBoard
-        writers = {}
+        # Khởi tạo các writers cho tensorboard
+        writers = {} # Có nhiều nhất 4 writers train, test, valid, deploy
         for dataset_type in dataset_filepaths.keys():
             writers[dataset_type] = tf.summary.FileWriter(tensorboard_log_folders[dataset_type], graph=sess.graph)
         embedding_writer = tf.summary.FileWriter(model_folder) # embedding_writer has to write in model_folder, otherwise TensorBoard won't be able to view embeddings
 
+        # Dùng cho việc visualize embedding bằng tensorboard
         embeddings_projector_config = projector.ProjectorConfig()
         tensorboard_token_embeddings = embeddings_projector_config.embeddings.add()
         tensorboard_token_embeddings.tensor_name = model.token_embedding_weights.name
@@ -376,12 +393,13 @@ class NeuroNER(object):
 
         projector.visualize_embeddings(embedding_writer, embeddings_projector_config)
 
-        # Write metadata for TensorBoard embeddings
+        # Ghi token vào file tsv dùng làm metadata cho embedding
         token_list_file = codecs.open(token_list_file_path,'w', 'UTF-8')
         for token_index in range(dataset.vocabulary_size):
             token_list_file.write('{0}\n'.format(dataset.index_to_token[token_index]))
         token_list_file.close()
 
+        # Ghi characters vào file tsv dùng làm metadata cho embedding 
         character_list_file = codecs.open(character_list_file_path,'w', 'UTF-8')
         for character_index in range(dataset.alphabet_size):
             if character_index == dataset.PADDING_CHARACTER_INDEX:

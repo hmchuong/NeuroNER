@@ -35,7 +35,7 @@ def show_values(pc, fmt="%.2f", **kw):
     By HYRY
     '''
     pc.update_scalarmappable()
-    ax = pc.get_axes()
+    ax = pc.axes
     for p, color, value in zip(pc.get_paths(), pc.get_facecolors(), pc.get_array()):
         x, y = p.vertices[:-2, :].mean(0)
         if np.all(color[:3] > 0.5):
@@ -45,7 +45,7 @@ def show_values(pc, fmt="%.2f", **kw):
         ax.text(x, y, fmt % value, ha="center", va="center", color=color, **kw)
 
 def cm2inch(*tupl):
-    # Chuyển đổi từ cm sang inch 
+    # Chuyển đổi từ cm sang inch
     '''
     Specify figure size in centimeter in matplotlib
     Source: http://stackoverflow.com/a/22787457/395857
@@ -66,7 +66,7 @@ def heatmap(AUC, title, xlabel, ylabel, xticklabels, yticklabels, figure_width=4
     '''
     if normalize:
         AUC = sklearn.preprocessing.normalize(AUC, norm='l1', axis=1)
-        
+
     if remove_diagonal:
         matrix = np.copy(AUC)
         np.fill_diagonal(matrix, 0)
@@ -144,7 +144,7 @@ def plot_classification_report(classification_report, title='Classification repo
             support.append(classification_report[label]["support"])
             classes.append('micro-avg' if label=='all' else label)
             class_names.append('micro-avg' if label=='all' else label)
-            plotMat.append([float(classification_report[label][x]) for x in ["precision", "recall", "f1"]]) 
+            plotMat.append([float(classification_report[label][x]) for x in ["precision", "recall", "f1"]])
     else:
         lines = classification_report.split('\n')
         for line in lines[2 : (len(lines) - 1)]:
@@ -155,7 +155,7 @@ def plot_classification_report(classification_report, title='Classification repo
             support.append(int(t[-1]))
             class_names.append(t[0])
             plotMat.append(v)
-    
+
     xlabel = 'Metrics'
     ylabel = 'Classes'
     xticklabels = ['Precision', 'Recall', 'F1-score']
@@ -242,5 +242,3 @@ def plot_threshold_vs_accuracy_curve(accuracies, thresholds, graph_path, title):
     plt.legend(loc="lower left")
     plt.savefig(graph_path, dpi=600, format='pdf', bbox_inches='tight') # use format='svg' or 'pdf' for vectorial pictures
     plt.close()
-
-
