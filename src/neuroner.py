@@ -454,6 +454,7 @@ class NeuroNER(object):
             writers[dataset_type].close()
 
     def predict(self, text):
+        # Not use
         self.prediction_count += 1
 
         if self.prediction_count == 1:
