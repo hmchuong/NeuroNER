@@ -20,6 +20,14 @@ class Dataset(object):
         self.debug = debug
 
     def _parse_dataset(self, dataset_filepath):
+        '''
+        Xử lý trên file *_compatible_with_brat_*
+        labels: [ [Danh sách các nhãn trong 1 dòng] ]
+        tokens: [ [Danh sách tokens trong 1 dòng] ]
+        token_count: { token: số lần xuất hiện }
+        label_count: { label: số lần xuất hiện }
+        character_count: { character: số lần xuất hiện }
+        '''
         token_count = collections.defaultdict(lambda: 0)
         label_count = collections.defaultdict(lambda: 0)
         character_count = collections.defaultdict(lambda: 0)
@@ -164,17 +172,17 @@ class Dataset(object):
             all_characters_in_pretraining_dataset = pretraining_dataset.index_to_character.values()
 
         remap_to_unk_count_threshold = 1
-        self.UNK_TOKEN_INDEX = 0
+        self.UNK_TOKEN_INDEX = 0                    # Index của những unknow token
         self.PADDING_CHARACTER_INDEX = 0
-        self.tokens_mapped_to_unk = []
+        self.tokens_mapped_to_unk = []              # những unknown token
         self.UNK = 'UNK'
-        self.unique_labels = []
-        labels = {}
-        tokens = {}
-        label_count = {}
-        token_count = {}
-        character_count = {}
-        for dataset_type in ['train', 'valid', 'test', 'deploy']:
+        self.unique_labels = []                     # Các nhãn tồn tại trong dataset
+        labels = {}                                 # nhãn
+        tokens = {}                                 # token
+        label_count = {}                            # Đếm số nhãn
+        token_count = {}                            # Đếm số token
+        character_count = {}                        # Đếm số ký tự
+        for dataset_type in ['train', 'valid', 'test', 'deploy']:  # Với mỗi loại data
             labels[dataset_type], tokens[dataset_type], token_count[dataset_type], label_count[dataset_type], character_count[dataset_type] \
                 = self._parse_dataset(dataset_filepaths.get(dataset_type, None))
 

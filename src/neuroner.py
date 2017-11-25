@@ -326,7 +326,7 @@ class NeuroNER(object):
         self.parameters = parameters                        # Các parameters
         self.conf_parameters = conf_parameters              # Các paramters config dùng cho Tensorflow
         self.sess = sess                                    # session chạy của tensorflow
-
+        
 
     def fit(self):
         '''
@@ -399,7 +399,7 @@ class NeuroNER(object):
             token_list_file.write('{0}\n'.format(dataset.index_to_token[token_index]))
         token_list_file.close()
 
-        # Ghi characters vào file tsv dùng làm metadata cho embedding 
+        # Ghi characters vào file tsv dùng làm metadata cho embedding
         character_list_file = codecs.open(character_list_file_path,'w', 'UTF-8')
         for character_index in range(dataset.alphabet_size):
             if character_index == dataset.PADDING_CHARACTER_INDEX:
@@ -411,7 +411,7 @@ class NeuroNER(object):
 
         # Start training + evaluation loop. Each iteration corresponds to 1 epoch.
         bad_counter = 0 # number of epochs with no improvement on the validation test in terms of F1-score
-        previous_best_valid_f1_score = 0
+        previous_best_valid_f1_score = 0 # f1-Score tốt nhất ở các lần chạy trước
         epoch_number = -1
         try:
             while True:
