@@ -340,7 +340,7 @@ class NeuroNER(object):
         sess = self.sess
         model = self.model
         transition_params_trained = self.transition_params_trained
-        stats_graph_folder, experiment_timestamp = self._create_stats_graph_folder(parameters)
+         stats_graph_folder, experiment_timestamp = self._create_stats_graph_folder(parameters)
 
         # Khởi tạo và lưu các thông tin của lần chạy
         start_time = time.time()
@@ -361,6 +361,7 @@ class NeuroNER(object):
 
         model_folder = os.path.join(stats_graph_folder, 'model')                # output/en.../model
         utils.create_folder_if_not_exists(model_folder)
+        # Save value cac parameters vao file parameters.ini
         with open(os.path.join(model_folder, 'parameters.ini'), 'w') as parameters_file:
             conf_parameters.write(parameters_file)                                          # Log các tham số ra file
         pickle.dump(dataset, open(os.path.join(model_folder, 'dataset.pickle'), 'wb'))      # Dump dataset thành pickle file để lần sau chạy
@@ -388,9 +389,13 @@ class NeuroNER(object):
 
         tensorboard_character_embeddings = embeddings_projector_config.embeddings.add()
         tensorboard_character_embeddings.tensor_name = model.character_embedding_weights.name
+        
+
+        # Link this tensor to its metadata file (e.g. labels)
         character_list_file_path = os.path.join(model_folder, 'tensorboard_metadata_characters.tsv')
         tensorboard_character_embeddings.metadata_path = os.path.relpath(character_list_file_path, '..')
 
+        # Saves a configuration file that TensorBoard will read during startup.
         projector.visualize_embeddings(embedding_writer, embeddings_projector_config)
 
         # Ghi token vào file tsv dùng làm metadata cho embedding
@@ -425,12 +430,14 @@ class NeuroNER(object):
                     # Train model: loop over all sequences of training set with shuffling
                     sequence_numbers=list(range(len(dataset.token_indices['train'])))
                     random.shuffle(sequence_numbers)
+                    # Thuc hien train
                     for sequence_number in sequence_numbers:
                         transition_params_trained = train.train_step(sess, dataset, sequence_number, model, parameters)
                         step += 1
                         if step % 10 == 0:
                             print('Training {0:.2f}% done'.format(step/len(sequence_numbers)*100), end='\r', flush=True)
 
+                # Tinh thoi gian thuc hien 1 epoch
                 epoch_elapsed_training_time = time.time() - epoch_start_time
                 print('Training completed in {0:.2f} seconds'.format(epoch_elapsed_training_time), flush=True)
 
@@ -455,6 +462,7 @@ class NeuroNER(object):
 
                 # Early stop
                 valid_f1_score = results['epoch'][epoch_number][0]['valid']['f1_score']['micro']
+                # If do chinh xac cua epoch > do chinh xac cua epoch truoc
                 if  valid_f1_score > previous_best_valid_f1_score:
                     bad_counter = 0
                     previous_best_valid_f1_score = valid_f1_score
@@ -464,11 +472,13 @@ class NeuroNER(object):
                     bad_counter += 1
                 print("The last {0} epochs have not shown improvements on the validation set.".format(bad_counter))
 
+                # If bad_counter den mot muc gioi han parameters['patience'] = 10 (gia tri khoi tao) finish train
                 if bad_counter >= parameters['patience']:
                     print('Early Stop!')
                     results['execution_details']['early_stop'] = True
                     break
 
+                # Neu so epoch >= so luong epoch toi da quy dinh --> ket thuc train
                 if epoch_number >= parameters['maximum_number_of_epochs']: break
 
 
@@ -476,6 +486,7 @@ class NeuroNER(object):
             results['execution_details']['keyboard_interrupt'] = True
             print('Training interrupted')
 
+        # Ket thuc train luu cac tham so time, ket qua
         print('Finishing the experiment')
         end_time = time.time()
         results['execution_details']['train_duration'] = end_time - start_time
@@ -485,6 +496,7 @@ class NeuroNER(object):
             writers[dataset_type].close()
 
     def predict(self, text):
+        # Not use
         self.prediction_count += 1
 
         if self.prediction_count == 1:
