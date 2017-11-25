@@ -70,6 +70,8 @@ class Dataset(object):
 
 
     def _convert_to_indices(self, dataset_types):
+        '''
+        '''
         tokens = self.tokens
         labels = self.labels
         token_to_index = self.token_to_index
@@ -168,8 +170,8 @@ class Dataset(object):
         all_characters_in_pretraining_dataset = []
         if parameters['use_pretrained_model']:
             pretraining_dataset = pickle.load(open(os.path.join(parameters['pretrained_model_folder'], 'dataset.pickle'), 'rb'))
-            all_tokens_in_pretraining_dataset = pretraining_dataset.index_to_token.values()
-            all_characters_in_pretraining_dataset = pretraining_dataset.index_to_character.values()
+            all_tokens_in_pretraining_dataset = pretraining_dataset.index_to_token.values() # Những token lưu ở đợt train trước
+            all_characters_in_pretraining_dataset = pretraining_dataset.index_to_character.values() # Những character lưu ở đợt train trước
 
         remap_to_unk_count_threshold = 1
         self.UNK_TOKEN_INDEX = 0                    # Index của những unknow token
@@ -177,22 +179,24 @@ class Dataset(object):
         self.tokens_mapped_to_unk = []              # những unknown token
         self.UNK = 'UNK'
         self.unique_labels = []                     # Các nhãn tồn tại trong dataset
-        labels = {}                                 # nhãn
-        tokens = {}                                 # token
-        label_count = {}                            # Đếm số nhãn
-        token_count = {}                            # Đếm số token
-        character_count = {}                        # Đếm số ký tự
-        for dataset_type in ['train', 'valid', 'test', 'deploy']:  # Với mỗi loại data
+        labels = {}                                 # nhãn {all: ...., train: ..., test: ...}
+        tokens = {}                                 # token {all: ...., train: ..., test: ...}
+        label_count = {}                            # Đếm số nhãn {all: ...., train: ..., test: ...}
+        token_count = {}                            # Đếm số token {all: ...., train: ..., test: ...}
+        character_count = {}                        # Đếm số ký tự {all: ...., train: ..., test: ...}
+        for dataset_type in ['train', 'valid', 'test', 'deploy']:
             labels[dataset_type], tokens[dataset_type], token_count[dataset_type], label_count[dataset_type], character_count[dataset_type] \
                 = self._parse_dataset(dataset_filepaths.get(dataset_type, None))
 
             if self.verbose: print("dataset_type: {0}".format(dataset_type))
             if self.verbose: print("len(token_count[dataset_type]): {0}".format(len(token_count[dataset_type])))
 
+        # Tính tổng hợp lại cho tất cả các dataset
         token_count['all'] = {}
         for token in list(token_count['train'].keys()) + list(token_count['valid'].keys()) + list(token_count['test'].keys()) + list(token_count['deploy'].keys()):
             token_count['all'][token] = token_count['train'][token] + token_count['valid'][token] + token_count['test'][token] + token_count['deploy'][token]
 
+        # Thêm những token ở pretrained trước với giá trị -1
         if parameters['load_all_pretrained_token_embeddings']:
             for token in token_to_vector:
                 if token not in token_count['all']:
@@ -203,10 +207,12 @@ class Dataset(object):
                     token_count['all'][token] = -1
                     token_count['train'][token] = -1
 
+        # Tính tổng hợp lại cho tất cả các dataset
         character_count['all'] = {}
         for character in list(character_count['train'].keys()) + list(character_count['valid'].keys()) + list(character_count['test'].keys()) + list(character_count['deploy'].keys()):
             character_count['all'][character] = character_count['train'][character] + character_count['valid'][character] + character_count['test'][character] + character_count['deploy'][character]
 
+        # Thêm những token ở pretrained trước với giá trị -1
         for character in all_characters_in_pretraining_dataset:
             if character not in character_count['all']:
                 character_count['all'][character] = -1
@@ -216,13 +222,14 @@ class Dataset(object):
             if self.verbose: print("dataset_type: {0}".format(dataset_type))
             if self.verbose: print("len(token_count[dataset_type]): {0}".format(len(token_count[dataset_type])))
 
+        # Tính tổng hợp lại các nhãn ở đợt train trước
         label_count['all'] = {}
         for character in list(label_count['train'].keys()) + list(label_count['valid'].keys()) + list(label_count['test'].keys()) + list(label_count['deploy'].keys()):
             label_count['all'][character] = label_count['train'][character] + label_count['valid'][character] + label_count['test'][character] + label_count['deploy'][character]
 
-        token_count['all'] = utils.order_dictionary(token_count['all'], 'value_key', reverse = True)
-        label_count['all'] = utils.order_dictionary(label_count['all'], 'key', reverse = False)
-        character_count['all'] = utils.order_dictionary(character_count['all'], 'value', reverse = True)
+        token_count['all'] = utils.order_dictionary(token_count['all'], 'value_key', reverse = True) # Sort token count theo các token có freq cao đến thấp, token desc
+        label_count['all'] = utils.order_dictionary(label_count['all'], 'key', reverse = False) # Sort label count theo label asc
+        character_count['all'] = utils.order_dictionary(character_count['all'], 'value', reverse = True) # Sort character count theo các character có freq cao đến thấp
         if self.verbose: print('character_count[\'all\']: {0}'.format(character_count['all']))
 
         token_to_index = {}
@@ -233,7 +240,9 @@ class Dataset(object):
         if self.verbose: print("len(token_count['train'].keys()): {0}".format(len(token_count['train'].keys())))
         for token, count in token_count['all'].items():
             if iteration_number == self.UNK_TOKEN_INDEX: iteration_number += 1
-
+            '''
+            UNK_TOKEN: token không xuất hiện trong pretraining_dataset và trong word vectors
+            '''
             if parameters['remap_unknown_tokens_to_unk'] == 1 and \
                 (token_count['train'][token] == 0 or \
                 parameters['load_only_pretrained_token_embeddings']) and \
@@ -250,7 +259,7 @@ class Dataset(object):
                 iteration_number += 1
         if self.verbose: print("number_of_unknown_tokens: {0}".format(number_of_unknown_tokens))
 
-        infrequent_token_indices = []
+        infrequent_token_indices = []       # Các token xuất hiện thấp trong train dataset
         for token, count in token_count['train'].items():
             if 0 < count <= remap_to_unk_count_threshold:
                 infrequent_token_indices.append(token_to_index[token])
@@ -258,10 +267,13 @@ class Dataset(object):
         if self.verbose: print("len(infrequent_token_indices): {0}".format(len(infrequent_token_indices)))
 
         # Ensure that both B- and I- versions exist for each label
+        # Bỏ các tiền tố B-, O-, I-...
         labels_without_bio = set()
         for label in label_count['all'].keys():
             new_label = utils_nlp.remove_bio_from_label_name(label)
             labels_without_bio.add(new_label)
+
+        # Kết hợp các ENTITY vs các tiền tố B-, I-,... và thêm vào label count
         for label in labels_without_bio:
             if label == 'O':
                 continue
@@ -273,6 +285,7 @@ class Dataset(object):
                 l = prefix + label
                 if l not in label_count['all']:
                     label_count['all'][l] = 0
+        # Sắp xếp label_count theo label asc
         label_count['all'] = utils.order_dictionary(label_count['all'], 'key', reverse = False)
 
         if parameters['use_pretrained_model']:
@@ -328,12 +341,15 @@ class Dataset(object):
                 if len(label_sequence) == 1 and label_sequence[0] != 'O':
                     print("{0}\t{1}".format(token_sequence[0], label_sequence[0]))
 
-        self.token_to_index = token_to_index
-        self.index_to_token = index_to_token
-        self.index_to_character = index_to_character
-        self.character_to_index = character_to_index
-        self.index_to_label = index_to_label
-        self.label_to_index = label_to_index
+        self.token_to_index = token_to_index                # {token: index sau khi sắp xếp theo freq từ cao đến thấp, 0 nếu là unk token}
+        self.index_to_token = index_to_token                # Ngược token_to_index
+
+        self.index_to_character = index_to_character        # Ngược character_to_index
+        self.character_to_index = character_to_index        # { character: index sau khi sắp xếp freq từ cao đến thấp}
+
+        self.index_to_label = index_to_label                # Ngược label_to_index
+        self.label_to_index = label_to_index                # {label: index sau khi sắp xếp asc}
+
         if self.verbose: print("len(self.token_to_index): {0}".format(len(self.token_to_index)))
         if self.verbose: print("len(self.index_to_token): {0}".format(len(self.index_to_token)))
         self.tokens = tokens

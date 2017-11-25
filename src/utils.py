@@ -9,8 +9,10 @@ import datetime
 import shutil
 
 def order_dictionary(dictionary, mode, reverse=False):
-    # Tạo ra một dict mới từ original dict và dict mới được sắp xếp theo mode được truyền vào 
+    # Tạo ra một dict mới từ original dict và dict mới được sắp xếp theo mode được truyền vào
     '''
+    reverse: True: giảm dần, False: tăng dần
+    mode: sort theo thứ tự nào, key_value: sort key xong đến value
     Order a dictionary by 'key' or 'value'.
     mode should be either 'key' or 'value'
     http://stackoverflow.com/questions/613183/sort-a-python-dictionary-by-value
@@ -35,7 +37,7 @@ def order_dictionary(dictionary, mode, reverse=False):
         raise ValueError("Unknown mode. Should be 'key' or 'value'")
 
 def reverse_dictionary(dictionary):
-    # Reverse giá trị cặp key-value trong dict. 
+    # Reverse giá trị cặp key-value trong dict.
     # Xử lý theo từng trường hợp là original dict hay dict đã được tạo từ original dict.
     '''
     http://stackoverflow.com/questions/483666/python-reverse-inverse-a-mapping
