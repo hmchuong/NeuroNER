@@ -283,14 +283,13 @@ class NeuroNER(object):
         # Load dataset
         dataset = ds.Dataset(verbose=parameters['verbose'], debug=parameters['debug'])
         token_to_vector = dataset.load_dataset(dataset_filepaths, parameters)
-        count=0
-        for k,v in token_to_vector.items():
-            print(k+": "+str(v))
-            count += 1
-            if count >= 10:
-                break
-        # Launch session
         '''
+        token_to_vector = {
+            "token": <ndarray> - giá trị word vector trong file glove.6B.100d.txt
+        }
+        '''
+        # Launch session
+
         session_conf = tf.ConfigProto(
         intra_op_parallelism_threads=parameters['number_of_cpu_threads'],
         inter_op_parallelism_threads=parameters['number_of_cpu_threads'],
@@ -320,7 +319,7 @@ class NeuroNER(object):
         self.parameters = parameters
         self.conf_parameters = conf_parameters
         self.sess = sess
-        '''
+
 
     def fit(self):
         parameters = self.parameters

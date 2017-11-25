@@ -243,7 +243,7 @@ def main(argv=sys.argv):
     arguments = parse_arguments(argv[1:])
 
     nn = NeuroNER(**arguments)
-    #nn.fit()
+    nn.fit()
     nn.close()
 
 if __name__ == "__main__":
