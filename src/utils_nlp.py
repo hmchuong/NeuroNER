@@ -8,16 +8,19 @@ import os
 import numpy as np
 
 def load_tokens_from_pretrained_token_embeddings(parameters):
+    # Load token tu file pretrained token 
     file_input = codecs.open(parameters['token_pretrained_embedding_filepath'], 'r', 'UTF-8')
     count = -1
     tokens = set()
     number_of_loaded_word_vectors = 0
+    # Doc tung line va xu ly
     for cur_line in file_input:
         count += 1
         cur_line = cur_line.strip()
         cur_line = cur_line.split(' ')
         if len(cur_line)==0:continue
         token=cur_line[0]
+        # Them vao set
         tokens.add(token)
         number_of_loaded_word_vectors += 1
     file_input.close()
@@ -25,6 +28,7 @@ def load_tokens_from_pretrained_token_embeddings(parameters):
 
 
 def load_pretrained_token_embeddings(parameters):
+    # Load value cho moi token voi file token pretrained va tra ve mot dict
     file_input = codecs.open(parameters['token_pretrained_embedding_filepath'], 'r', 'UTF-8')
     count = -1
     token_to_vector = {}
@@ -36,6 +40,7 @@ def load_pretrained_token_embeddings(parameters):
         if len(cur_line)==0:continue
         token = cur_line[0]
         vector = np.array([float(x) for x in cur_line[1:]])
+        # Gan cho moi token
         token_to_vector[token] = vector
     file_input.close()
     return token_to_vector

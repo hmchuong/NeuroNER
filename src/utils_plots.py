@@ -11,6 +11,7 @@ import sklearn.preprocessing
 from matplotlib import cm
 
 def get_cmap():
+    # Thay đổi cường độ màu trong colormap
     '''
     http://stackoverflow.com/questions/37517587/how-can-i-change-the-intensity-of-a-colormap-in-matplotlib
     '''
@@ -27,6 +28,7 @@ def get_cmap():
     return my_cmap
 
 def show_values(pc, fmt="%.2f", **kw):
+    # Thể hiện các giá trị trong mỗi ô trong colormap
     '''
     Heatmap with text in each cell with matplotlib's pyplot
     Source: http://stackoverflow.com/a/25074150/395857
@@ -43,6 +45,7 @@ def show_values(pc, fmt="%.2f", **kw):
         ax.text(x, y, fmt % value, ha="center", va="center", color=color, **kw)
 
 def cm2inch(*tupl):
+    # Chuyển đổi từ cm sang inch 
     '''
     Specify figure size in centimeter in matplotlib
     Source: http://stackoverflow.com/a/22787457/395857
@@ -55,6 +58,7 @@ def cm2inch(*tupl):
         return tuple(i/inch for i in tupl)
 
 def heatmap(AUC, title, xlabel, ylabel, xticklabels, yticklabels, figure_width=40, figure_height=20, correct_orientation=False, cmap='RdBu', fmt="%.2f", graph_filepath='', normalize=False, remove_diagonal=False):
+    # Vẽ bản đồ với các tham số về colormap, show_values đã được thiết lập từ các hàm
     '''
     Inspired by:
     - http://stackoverflow.com/a/16124677/395857
@@ -126,6 +130,7 @@ def heatmap(AUC, title, xlabel, ylabel, xticklabels, yticklabels, figure_width=4
 
 
 def plot_classification_report(classification_report, title='Classification report ', cmap='RdBu', from_conll_json=False):
+    # Vẽ kết quả của quá trình phân lớp
     '''
     Plot scikit-learn classification report.
     Extension based on http://stackoverflow.com/a/31689645/395857
@@ -163,6 +168,7 @@ def plot_classification_report(classification_report, title='Classification repo
 
 
 def plot_hist(sequence, xlabel, ylabel, title, graph_path):
+    # Not use
     xmin = min(sequence)
     xmax = max(sequence)
     step = 1
@@ -178,6 +184,7 @@ def plot_hist(sequence, xlabel, ylabel, title, graph_path):
 
 
 def plot_barh(x, y, xlabel, ylabel, title, graph_path):
+    # Not use
     width = 1
     fig, ax = plt.subplots()
     ind = np.arange(len(y))  # the x locations for the groups
@@ -196,6 +203,7 @@ def plot_barh(x, y, xlabel, ylabel, title, graph_path):
 
 
 def plot_precision_recall_curve(recall, precision, graph_path, title):
+    # Not use
     plt.clf()
     plt.plot(recall, precision, label='Precision-Recall curve')
     plt.xlabel('Recall')
@@ -209,6 +217,7 @@ def plot_precision_recall_curve(recall, precision, graph_path, title):
 
 
 def plot_roc_curve(fpr, tpr, graph_path, title):
+    # Not use
     plt.clf()
     plt.plot(fpr, tpr, label='ROC curve')
     plt.xlabel('FPR')
@@ -222,6 +231,7 @@ def plot_roc_curve(fpr, tpr, graph_path, title):
 
 
 def plot_threshold_vs_accuracy_curve(accuracies, thresholds, graph_path, title):
+    # Not use
     plt.clf()
     plt.plot(thresholds, accuracies, label='ROC curve')
     plt.xlabel('Threshold')
