@@ -165,16 +165,16 @@ def check_brat_annotation_and_text_compatibility(brat_folder):
 def brat_to_conll(input_folder, output_filepath, tokenizer, language):
     '''
     Chuyển format dạng brat sang dạng conll
-    input_folder: folder chứa các file output theo chuẩn brat (gồm .txt và .ann)
+    input_folder: folder chứa các file input theo chuẩn brat (gồm .txt và .ann)
     output_filepath: đường dẫn đầu ra theo chuẩn conll
     tokenizer: string mô tả tool tokenizer sẽ sử dụng, ở đây có spacy và stanford
-    language: ngôn ngữ dùng cho việc tokenize
+    language: ngôn ngữ dùng cho việc tokenize 'en'
 
     Kết quả có thể xem trong file conll.txt
     format chung của output là: <token> <filename> <start index> <end index> <label>
     Label:
         - 0: không phải entity
-            - I-*: entity chưa hoàn thiện gồm nhiều token, cần ghép các entity dạng I-* gần nhau lại mới được dạng B-*
+        - I-*: entity chưa hoàn thiện gồm nhiều token, cần ghép các entity dạng I-* gần nhau lại mới được dạng B-*
         - B-*: entity đã hoàn thiện, chỉ gồm 1 token
     '''
 
