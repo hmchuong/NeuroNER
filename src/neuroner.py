@@ -19,7 +19,7 @@ import pickle
 import brat_to_conll
 import numpy as np
 import utils_nlp
-import distutils
+import distutils.util
 import configparser
 from pprint import pprint
 # http://stackoverflow.com/questions/42217532/tensorflow-version-1-0-0-rc2-on-windows-opkernel-op-bestsplits-device-typ
@@ -116,7 +116,7 @@ class NeuroNER(object):
                      'reload_character_embeddings', 'reload_character_lstm', 'reload_token_embeddings', 'reload_token_lstm', 'reload_feedforward', 'reload_crf',
                      'check_for_lowercase', 'check_for_digits_replaced_with_zeros', 'freeze_token_embeddings', 'load_only_pretrained_token_embeddings', 'load_all_pretrained_token_embeddings']:
                 parameters[k] = distutils.util.strtobool(v)
-        # If loading pretrained model, set the model hyperparameters according to the pretraining parameters 
+        # If loading pretrained model, set the model hyperparameters according to the pretraining parameters
         if parameters['use_pretrained_model']:
             pretraining_parameters = self._load_parameters(parameters_filepath=os.path.join(parameters['pretrained_model_folder'], 'parameters.ini'), verbose=False)[0]
             for name in ['use_character_lstm', 'character_embedding_dimension', 'character_lstm_hidden_state_dimension', 'token_embedding_dimension', 'token_lstm_hidden_state_dimension', 'use_crf']:
@@ -131,8 +131,8 @@ class NeuroNER(object):
         for k, v in parameters.items():
             conf_parameters.set(parameter_to_section[k], k, str(v))
 
-        return parameters, conf_parameters    
-    
+        return parameters, conf_parameters
+
     def _get_valid_dataset_filepaths(self, parameters, dataset_types=['train', 'valid', 'test', 'deploy']):
         dataset_filepaths = {}
         dataset_brat_folders = {}
@@ -140,25 +140,25 @@ class NeuroNER(object):
             dataset_filepaths[dataset_type] = os.path.join(parameters['dataset_text_folder'], '{0}.txt'.format(dataset_type))
             dataset_brat_folders[dataset_type] = os.path.join(parameters['dataset_text_folder'], dataset_type)
             dataset_compatible_with_brat_filepath = os.path.join(parameters['dataset_text_folder'], '{0}_compatible_with_brat.txt'.format(dataset_type))
-    
+
             # Conll file exists
             if os.path.isfile(dataset_filepaths[dataset_type]) and os.path.getsize(dataset_filepaths[dataset_type]) > 0:
                 # Brat text files exist
                 if os.path.exists(dataset_brat_folders[dataset_type]) and len(glob.glob(os.path.join(dataset_brat_folders[dataset_type], '*.txt'))) > 0:
-    
+
                     # Check compatibility between conll and brat files
                     brat_to_conll.check_brat_annotation_and_text_compatibility(dataset_brat_folders[dataset_type])
                     if os.path.exists(dataset_compatible_with_brat_filepath):
                         dataset_filepaths[dataset_type] = dataset_compatible_with_brat_filepath
                     conll_to_brat.check_compatibility_between_conll_and_brat_text(dataset_filepaths[dataset_type], dataset_brat_folders[dataset_type])
-    
+
                 # Brat text files do not exist
                 else:
-    
+
                     # Populate brat text and annotation files based on conll file
                     conll_to_brat.conll_to_brat(dataset_filepaths[dataset_type], dataset_compatible_with_brat_filepath, dataset_brat_folders[dataset_type], dataset_brat_folders[dataset_type])
                     dataset_filepaths[dataset_type] = dataset_compatible_with_brat_filepath
-    
+
             # Conll file does not exist
             else:
                 # Brat text files exist
@@ -170,21 +170,21 @@ class NeuroNER(object):
                         # Populate conll file based on brat files
                         brat_to_conll.brat_to_conll(dataset_brat_folders[dataset_type], dataset_filepath_for_tokenizer, parameters['tokenizer'], parameters['spacylanguage'])
                     dataset_filepaths[dataset_type] = dataset_filepath_for_tokenizer
-    
+
                 # Brat text files do not exist
                 else:
                     del dataset_filepaths[dataset_type]
                     del dataset_brat_folders[dataset_type]
                     continue
-    
+
             if parameters['tagging_format'] == 'bioes':
                 # Generate conll file with BIOES format
                 bioes_filepath = os.path.join(parameters['dataset_text_folder'], '{0}_bioes.txt'.format(utils.get_basename_without_extension(dataset_filepaths[dataset_type])))
                 utils_nlp.convert_conll_from_bio_to_bioes(dataset_filepaths[dataset_type], bioes_filepath)
                 dataset_filepaths[dataset_type] = bioes_filepath
-    
+
         return dataset_filepaths, dataset_brat_folders
-    
+
     def _check_parameter_compatiblity(self, parameters, dataset_filepaths):
         # Check mode of operation
         if parameters['train_model']:
@@ -197,19 +197,19 @@ class NeuroNER(object):
                 raise IOError("For prediction mode, either test set and deploy set must exist in the specified dataset folder: {0}".format(parameters['dataset_text_folder']))
         else: #if not parameters['train_model'] and not parameters['use_pretrained_model']:
             raise ValueError('At least one of train_model and use_pretrained_model must be set to True.')
-    
+
         if parameters['use_pretrained_model']:
             if all([not parameters[s] for s in ['reload_character_embeddings', 'reload_character_lstm', 'reload_token_embeddings', 'reload_token_lstm', 'reload_feedforward', 'reload_crf']]):
                 raise ValueError('If use_pretrained_model is set to True, at least one of reload_character_embeddings, reload_character_lstm, reload_token_embeddings, reload_token_lstm, reload_feedforward, reload_crf must be set to True.')
-    
+
         if parameters['gradient_clipping_value'] < 0:
             parameters['gradient_clipping_value'] = abs(parameters['gradient_clipping_value'])
 
 
     def __init__(self,
-                 parameters_filepath=argument_default_value, 
+                 parameters_filepath=argument_default_value,
                  pretrained_model_folder=argument_default_value,
-                 dataset_text_folder=argument_default_value, 
+                 dataset_text_folder=argument_default_value,
                  character_embedding_dimension=argument_default_value,
                  character_lstm_hidden_state_dimension=argument_default_value,
                  check_for_digits_replaced_with_zeros=argument_default_value,
@@ -249,10 +249,10 @@ class NeuroNER(object):
                  use_pretrained_model=argument_default_value,
                  verbose=argument_default_value,
                  argument_default_value=argument_default_value):
-        
+
         # Parse arguments
         arguments = dict( (k,str(v)) for k,v in locals().items() if k !='self')
-        
+
         # Initialize parameters
         parameters, conf_parameters = self._load_parameters(arguments['parameters_filepath'], arguments=arguments)
         dataset_filepaths, dataset_brat_folders = self._get_valid_dataset_filepaths(parameters)
@@ -261,7 +261,7 @@ class NeuroNER(object):
         # Load dataset
         dataset = ds.Dataset(verbose=parameters['verbose'], debug=parameters['debug'])
         token_to_vector = dataset.load_dataset(dataset_filepaths, parameters)
-        
+
         # Launch session
         session_conf = tf.ConfigProto(
         intra_op_parallelism_threads=parameters['number_of_cpu_threads'],
@@ -271,7 +271,7 @@ class NeuroNER(object):
         log_device_placement=False
         )
         sess = tf.Session(config=session_conf)
-        
+
         with sess.as_default():
             # Create model and initialize or load pretrained model
             ### Instantiate the model
@@ -292,7 +292,7 @@ class NeuroNER(object):
         self.parameters = parameters
         self.conf_parameters = conf_parameters
         self.sess = sess
-   
+
     def fit(self):
         parameters = self.parameters
         conf_parameters = self.conf_parameters
@@ -321,14 +321,14 @@ class NeuroNER(object):
         with open(os.path.join(model_folder, 'parameters.ini'), 'w') as parameters_file:
             conf_parameters.write(parameters_file)
         pickle.dump(dataset, open(os.path.join(model_folder, 'dataset.pickle'), 'wb'))
-            
+
         tensorboard_log_folder = os.path.join(stats_graph_folder, 'tensorboard_logs')
         utils.create_folder_if_not_exists(tensorboard_log_folder)
         tensorboard_log_folders = {}
         for dataset_type in dataset_filepaths.keys():
             tensorboard_log_folders[dataset_type] = os.path.join(stats_graph_folder, 'tensorboard_logs', dataset_type)
             utils.create_folder_if_not_exists(tensorboard_log_folders[dataset_type])
-                
+
         # Instantiate the writers for TensorBoard
         writers = {}
         for dataset_type in dataset_filepaths.keys():
@@ -439,53 +439,51 @@ class NeuroNER(object):
             writers[dataset_type].close()
 
     def predict(self, text):
-        self.prediction_count += 1        
-        
+        self.prediction_count += 1
+
         if self.prediction_count == 1:
             self.parameters['dataset_text_folder'] = os.path.join('..', 'data', 'temp')
             self.stats_graph_folder, _ = self._create_stats_graph_folder(self.parameters)
-        
-        # Update the deploy folder, file, and dataset 
+
+        # Update the deploy folder, file, and dataset
         dataset_type = 'deploy'
-        ### Delete all deployment data    
+        ### Delete all deployment data
         for filepath in glob.glob(os.path.join(self.parameters['dataset_text_folder'], '{0}*'.format(dataset_type))):
-            if os.path.isdir(filepath): 
+            if os.path.isdir(filepath):
                 shutil.rmtree(filepath)
             else:
                 os.remove(filepath)
         ### Create brat folder and file
         dataset_brat_deploy_folder = os.path.join(self.parameters['dataset_text_folder'], dataset_type)
         utils.create_folder_if_not_exists(dataset_brat_deploy_folder)
-        dataset_brat_deploy_filepath = os.path.join(dataset_brat_deploy_folder, 'temp_{0}.txt'.format(str(self.prediction_count).zfill(5)))#self._get_dataset_brat_deploy_filepath(dataset_brat_deploy_folder) 
+        dataset_brat_deploy_filepath = os.path.join(dataset_brat_deploy_folder, 'temp_{0}.txt'.format(str(self.prediction_count).zfill(5)))#self._get_dataset_brat_deploy_filepath(dataset_brat_deploy_folder)
         with codecs.open(dataset_brat_deploy_filepath, 'w', 'UTF-8') as f:
             f.write(text)
         ### Update deploy filepaths
         dataset_filepaths, dataset_brat_folders = self._get_valid_dataset_filepaths(self.parameters, dataset_types=[dataset_type])
         self.dataset_filepaths.update(dataset_filepaths)
-        self.dataset_brat_folders.update(dataset_brat_folders)        
+        self.dataset_brat_folders.update(dataset_brat_folders)
         ### Update the dataset for the new deploy set
         self.dataset.update_dataset(self.dataset_filepaths, [dataset_type])
-        
+
         # Predict labels and output brat
         output_filepaths = {}
         prediction_output = train.prediction_step(self.sess, self.dataset, dataset_type, self.model, self.transition_params_trained, self.stats_graph_folder, self.prediction_count, self.parameters, self.dataset_filepaths)
         _, _, output_filepaths[dataset_type] = prediction_output
         conll_to_brat.output_brat(output_filepaths, self.dataset_brat_folders, self.stats_graph_folder, overwrite=True)
-        
+
         # Print and output result
         text_filepath = os.path.join(self.stats_graph_folder, 'brat', 'deploy', os.path.basename(dataset_brat_deploy_filepath))
         annotation_filepath = os.path.join(self.stats_graph_folder, 'brat', 'deploy', '{0}.ann'.format(utils.get_basename_without_extension(dataset_brat_deploy_filepath)))
         text2, entities = brat_to_conll.get_entities_from_brat(text_filepath, annotation_filepath, verbose=True)
         assert(text == text2)
         return entities
-    
+
     def get_params(self):
         return self.parameters
-    
+
     def close(self):
         self.__del__()
-    
+
     def __del__(self):
         self.sess.close()
-    
-
