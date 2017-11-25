@@ -326,7 +326,7 @@ class NeuroNER(object):
         self.parameters = parameters                        # Các parameters
         self.conf_parameters = conf_parameters              # Các paramters config dùng cho Tensorflow
         self.sess = sess                                    # session chạy của tensorflow
-        
+
 
     def fit(self):
         '''
@@ -340,7 +340,7 @@ class NeuroNER(object):
         sess = self.sess
         model = self.model
         transition_params_trained = self.transition_params_trained
-         stats_graph_folder, experiment_timestamp = self._create_stats_graph_folder(parameters)
+        stats_graph_folder, experiment_timestamp = self._create_stats_graph_folder(parameters)
 
         # Khởi tạo và lưu các thông tin của lần chạy
         start_time = time.time()
@@ -389,7 +389,7 @@ class NeuroNER(object):
 
         tensorboard_character_embeddings = embeddings_projector_config.embeddings.add()
         tensorboard_character_embeddings.tensor_name = model.character_embedding_weights.name
-        
+
 
         # Link this tensor to its metadata file (e.g. labels)
         character_list_file_path = os.path.join(model_folder, 'tensorboard_metadata_characters.tsv')

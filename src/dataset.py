@@ -70,85 +70,85 @@ class Dataset(object):
 
 
         def _convert_to_indices(self, dataset_types):
-        """
-        Hàm này hiểu như là nó đã có giá trị sẵn rồi từ token_to_index, convert lại theo cấu trúc mới thôi
+            '''
+            Hàm này hiểu như là nó đã có giá trị sẵn rồi từ token_to_index, convert lại theo cấu trúc mới thôi
 
-        Input
-            dataset_types: List các thư mục dataset sử dụng
-                Sample:
-                    ["deploy", "train", "test", "valid"]
-        
-        Ouput
-            token_indices, label_indices, character_indices_padded, character_indices, token_lengths, characters, label_vector_indices
-                Struct
-                    { "datatype" : [[giá trị của từng token trong token_sequence]]} // token_indices
-        """
-        tokens = self.tokens
-        labels = self.labels
-        token_to_index = self.token_to_index
-        character_to_index = self.character_to_index
-        label_to_index = self.label_to_index
-        index_to_label = self.index_to_label
-        
-        # Map tokens and labels to their indices
-        token_indices = {}
-        label_indices = {}
-        characters = {}
-        token_lengths = {}
-        character_indices = {}
-        character_indices_padded = {}
-        for dataset_type in dataset_types:
-            token_indices[dataset_type] = []
-            characters[dataset_type] = []
-            character_indices[dataset_type] = []
-            token_lengths[dataset_type] = []
-            character_indices_padded[dataset_type] = []
-            for token_sequence in tokens[dataset_type]:
-                """
-                token_to_index, character_to_index, label_to_index: OrderedDict
-                    Stuct
-                        {
-                            "token": val
-                        }
-                """
-                token_indices[dataset_type].append([token_to_index.get(token, self.UNK_TOKEN_INDEX) for token in token_sequence])
-                characters[dataset_type].append([list(token) for token in token_sequence])
-                character_indices[dataset_type].append([[character_to_index.get(character, random.randint(1, max(self.index_to_character.keys()))) for character in token] for token in token_sequence])
-                token_lengths[dataset_type].append([len(token) for token in token_sequence])
-                longest_token_length_in_sequence = max(token_lengths[dataset_type][-1])
-                character_indices_padded[dataset_type].append([utils.pad_list(temp_token_indices, longest_token_length_in_sequence, self.PADDING_CHARACTER_INDEX) for temp_token_indices in character_indices[dataset_type][-1]])
-            
-            label_indices[dataset_type] = []
-            for label_sequence in labels[dataset_type]:
-                label_indices[dataset_type].append([label_to_index[label] for label in label_sequence])
-        
-        if self.verbose:
-            print('token_lengths[\'train\'][0][0:10]: {0}'.format(token_lengths['train'][0][0:10]))
-        if self.verbose:
-            print('characters[\'train\'][0][0:10]: {0}'.format(characters['train'][0][0:10]))
-        if self.verbose:
-            print('token_indices[\'train\'][0:10]: {0}'.format(token_indices['train'][0:10]))
-        if self.verbose:
-            print('label_indices[\'train\'][0:10]: {0}'.format(label_indices['train'][0:10]))
-        if self.verbose:
-            print('character_indices[\'train\'][0][0:10]: {0}'.format(character_indices['train'][0][0:10]))
-        if self.verbose:
-            print('character_indices_padded[\'train\'][0][0:10]: {0}'.format(character_indices_padded['train'][0][0:10])) # Vectorize the labels
-        # [Numpy 1-hot array](http://stackoverflow.com/a/42263603/395857)
-        label_binarizer = sklearn.preprocessing.LabelBinarizer()
-        label_binarizer.fit(range(max(index_to_label.keys()) + 1))
-        label_vector_indices = {}
-        for dataset_type in dataset_types:
-            label_vector_indices[dataset_type] = []
-            for label_indices_sequence in label_indices[dataset_type]:
-                label_vector_indices[dataset_type].append(label_binarizer.transform(label_indices_sequence))
-        
-        if self.verbose:
-            print('label_vector_indices[\'train\'][0:2]: {0}'.format(label_vector_indices['train'][0:2]))
-        if self.verbose:
-            print('len(label_vector_indices[\'train\']): {0}'.format(len(label_vector_indices['train'])))
-            
-        return token_indices, label_indices, character_indices_padded, character_indices, token_lengths, characters, label_vector_indices
+            Input
+                dataset_types: List các thư mục dataset sử dụng
+                    Sample:
+                        ["deploy", "train", "test", "valid"]
+
+            Ouput
+                token_indices, label_indices, character_indices_padded, character_indices, token_lengths, characters, label_vector_indices
+                    Struct
+                        { "datatype" : [[giá trị của từng token trong token_sequence]]} // token_indices
+            '''
+            tokens = self.tokens
+            labels = self.labels
+            token_to_index = self.token_to_index
+            character_to_index = self.character_to_index
+            label_to_index = self.label_to_index
+            index_to_label = self.index_to_label
+
+            # Map tokens and labels to their indices
+            token_indices = {}
+            label_indices = {}
+            characters = {}
+            token_lengths = {}
+            character_indices = {}
+            character_indices_padded = {}
+            for dataset_type in dataset_types:
+                token_indices[dataset_type] = []
+                characters[dataset_type] = []
+                character_indices[dataset_type] = []
+                token_lengths[dataset_type] = []
+                character_indices_padded[dataset_type] = []
+                for token_sequence in tokens[dataset_type]:
+                    """
+                    token_to_index, character_to_index, label_to_index: OrderedDict
+                        Stuct
+                            {
+                                "token": val
+                            }
+                    """
+                    token_indices[dataset_type].append([token_to_index.get(token, self.UNK_TOKEN_INDEX) for token in token_sequence])
+                    characters[dataset_type].append([list(token) for token in token_sequence])
+                    character_indices[dataset_type].append([[character_to_index.get(character, random.randint(1, max(self.index_to_character.keys()))) for character in token] for token in token_sequence])
+                    token_lengths[dataset_type].append([len(token) for token in token_sequence])
+                    longest_token_length_in_sequence = max(token_lengths[dataset_type][-1])
+                    character_indices_padded[dataset_type].append([utils.pad_list(temp_token_indices, longest_token_length_in_sequence, self.PADDING_CHARACTER_INDEX) for temp_token_indices in character_indices[dataset_type][-1]])
+
+                label_indices[dataset_type] = []
+                for label_sequence in labels[dataset_type]:
+                    label_indices[dataset_type].append([label_to_index[label] for label in label_sequence])
+
+            if self.verbose:
+                print('token_lengths[\'train\'][0][0:10]: {0}'.format(token_lengths['train'][0][0:10]))
+            if self.verbose:
+                print('characters[\'train\'][0][0:10]: {0}'.format(characters['train'][0][0:10]))
+            if self.verbose:
+                print('token_indices[\'train\'][0:10]: {0}'.format(token_indices['train'][0:10]))
+            if self.verbose:
+                print('label_indices[\'train\'][0:10]: {0}'.format(label_indices['train'][0:10]))
+            if self.verbose:
+                print('character_indices[\'train\'][0][0:10]: {0}'.format(character_indices['train'][0][0:10]))
+            if self.verbose:
+                print('character_indices_padded[\'train\'][0][0:10]: {0}'.format(character_indices_padded['train'][0][0:10])) # Vectorize the labels
+            # [Numpy 1-hot array](http://stackoverflow.com/a/42263603/395857)
+            label_binarizer = sklearn.preprocessing.LabelBinarizer()
+            label_binarizer.fit(range(max(index_to_label.keys()) + 1))
+            label_vector_indices = {}
+            for dataset_type in dataset_types:
+                label_vector_indices[dataset_type] = []
+                for label_indices_sequence in label_indices[dataset_type]:
+                    label_vector_indices[dataset_type].append(label_binarizer.transform(label_indices_sequence))
+
+            if self.verbose:
+                print('label_vector_indices[\'train\'][0:2]: {0}'.format(label_vector_indices['train'][0:2]))
+            if self.verbose:
+                print('len(label_vector_indices[\'train\']): {0}'.format(len(label_vector_indices['train'])))
+
+            return token_indices, label_indices, character_indices_padded, character_indices, token_lengths, characters, label_vector_indices
 
 
     def update_dataset(self, dataset_filepaths, dataset_types):
