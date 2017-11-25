@@ -134,6 +134,26 @@ class NeuroNER(object):
         return parameters, conf_parameters
 
     def _get_valid_dataset_filepaths(self, parameters, dataset_types=['train', 'valid', 'test', 'deploy']):
+        '''
+        Tiền xử lý dataset đầu vào, nếu data chuẩn conll thì chuyển sang brat
+        Tham số:
+            - parameters: parameters của toàn bộ chương trình
+        Return:
+        (
+            {   // dataset_filepaths các fields bên dưới là optional, không nhất thiết phải đủ 4
+                "train": "data_text_folder/train[_compatible_with_brat][_bioes].txt",
+                "valid": "data_text_folder/valid[_compatible_with_brat][_bioes].txt",
+                "test": "data_text_folder/test[_compatible_with_brat][_bioes].txt",
+                "deploy": "data_text_folder/deploy[_compatible_with_brat][_bioes].txt"
+            },
+            {   // dataset_brat_folders, các fields bên dưới là optional, không nhất thiết phải đủ 4
+                "train": "data_text_folder/train",
+                "valid": "data_text_folder/valid",
+                "test": "data_text_folder/test",
+                "deploy": "data_text_folder/deploy"
+            }
+        )
+        '''
         dataset_filepaths = {}
         dataset_brat_folders = {}
         for dataset_type in dataset_types:
@@ -250,19 +270,27 @@ class NeuroNER(object):
                  verbose=argument_default_value,
                  argument_default_value=argument_default_value):
 
-        # Parse arguments
+        # Lấy toàn bộ argument được truyền vào
         arguments = dict( (k,str(v)) for k,v in locals().items() if k !='self')
 
-        # Initialize parameters
+        # Khởi tạo parameter từ đường dẫn và các parameter truyền vào (coi trong file paremeters.ini)
         parameters, conf_parameters = self._load_parameters(arguments['parameters_filepath'], arguments=arguments)
         dataset_filepaths, dataset_brat_folders = self._get_valid_dataset_filepaths(parameters)
+
+        # Kiểm tra độ phù hợp của các parameter
         self._check_parameter_compatiblity(parameters, dataset_filepaths)
 
         # Load dataset
         dataset = ds.Dataset(verbose=parameters['verbose'], debug=parameters['debug'])
         token_to_vector = dataset.load_dataset(dataset_filepaths, parameters)
-
+        count=0
+        for k,v in token_to_vector.items():
+            print(k+": "+str(v))
+            count += 1
+            if count >= 10:
+                break
         # Launch session
+        '''
         session_conf = tf.ConfigProto(
         intra_op_parallelism_threads=parameters['number_of_cpu_threads'],
         inter_op_parallelism_threads=parameters['number_of_cpu_threads'],
@@ -292,6 +320,7 @@ class NeuroNER(object):
         self.parameters = parameters
         self.conf_parameters = conf_parameters
         self.sess = sess
+        '''
 
     def fit(self):
         parameters = self.parameters

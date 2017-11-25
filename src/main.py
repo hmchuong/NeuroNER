@@ -87,7 +87,7 @@ def load_parameters(parameters_filepath, arguments={}, verbose=True):
                  'reload_character_embeddings', 'reload_character_lstm', 'reload_token_embeddings', 'reload_token_lstm', 'reload_feedforward', 'reload_crf',
                  'check_for_lowercase', 'check_for_digits_replaced_with_zeros', 'freeze_token_embeddings', 'load_only_pretrained_token_embeddings']:
             parameters[k] = distutils.util.strtobool(v)
-    # If loading pretrained model, set the model hyperparameters according to the pretraining parameters 
+    # If loading pretrained model, set the model hyperparameters according to the pretraining parameters
     if parameters['use_pretrained_model']:
         pretraining_parameters = load_parameters(parameters_filepath=os.path.join(parameters['pretrained_model_folder'], 'parameters.ini'), verbose=False)[0]
         for name in ['use_character_lstm', 'character_embedding_dimension', 'character_lstm_hidden_state_dimension', 'token_embedding_dimension', 'token_lstm_hidden_state_dimension', 'use_crf']:
@@ -169,7 +169,7 @@ def check_parameter_compatiblity(parameters, dataset_filepaths):
 
     if parameters['gradient_clipping_value'] < 0:
         parameters['gradient_clipping_value'] = abs(parameters['gradient_clipping_value'])
-        
+
 
 def parse_arguments(arguments=None):
     ''' Parse the NeuroNER arguments
@@ -241,12 +241,10 @@ def main(argv=sys.argv):
     '''
     # Parse arguments
     arguments = parse_arguments(argv[1:])
-    
+
     nn = NeuroNER(**arguments)
-    nn.fit()
-    nn.close() 
+    #nn.fit()
+    nn.close()
 
 if __name__ == "__main__":
     main()
-
-
