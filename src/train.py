@@ -11,10 +11,24 @@ import utils_nlp
 
 def train_step(sess, dataset, sequence_number, model, parameters):
     # Perform one iteration
-    token_indices_sequence = dataset.token_indices['train'][sequence_number]
+    token_indices_sequence = dataset.token_indices['train'][sequence_number] #
+    print("Token indices sequence:\n")
+    print (token_indices_sequence)
+    print("Token indices:\n")
+    for index in token_indices_sequence:
+        print (dataset.index_to_token[index])
+
     for i, token_index in enumerate(token_indices_sequence):
         if token_index in dataset.infrequent_token_indices and np.random.uniform() < 0.5:
             token_indices_sequence[i] = dataset.UNK_TOKEN_INDEX
+    print("Label vector indices\n")
+    print(dataset.label_vector_indices['train'][sequence_number])
+    print("Character indices padded\n")
+    print(dataset.character_indices_padded['train'][sequence_number])
+    print("Token length\n")
+    print(dataset.token_lengths['train'][sequence_number])
+    print("Label indices\n")
+    print(dataset.label_indices['train'][sequence_number])
     feed_dict = {
       model.input_token_indices: token_indices_sequence,
       model.input_label_indices_vector: dataset.label_vector_indices['train'][sequence_number],
@@ -72,8 +86,8 @@ def prediction_step(sess, dataset, dataset_type, model, transition_params_traine
                     if parameters['tagging_format'] == 'bioes':
                         split_line.pop()
                     gold_label_original = split_line[-1]
-                    assert(token == token_original and gold_label == gold_label_original) 
-                    break            
+                    assert(token == token_original and gold_label == gold_label_original)
+                    break
             split_line.append(prediction)
             output_string += ' '.join(split_line) + '\n'
         output_file.write(output_string+'\n')
@@ -111,5 +125,3 @@ def predict_labels(sess, model, transition_params_trained, parameters, dataset, 
         prediction_output = prediction_step(sess, dataset, dataset_type, model, transition_params_trained, stats_graph_folder, epoch_number, parameters, dataset_filepaths)
         y_pred[dataset_type], y_true[dataset_type], output_filepaths[dataset_type] = prediction_output
     return y_pred, y_true, output_filepaths
-
-

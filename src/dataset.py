@@ -82,6 +82,9 @@ class Dataset(object):
             token_indices, label_indices, character_indices_padded, character_indices, token_lengths, characters, label_vector_indices
                 Struct
                     { "datatype" : [[giá trị của từng token trong token_sequence]]} // token_indices
+                    {
+                        "train": [[token_index1, token_index2]]
+                    }
         '''
         tokens = self.tokens
         labels = self.labels

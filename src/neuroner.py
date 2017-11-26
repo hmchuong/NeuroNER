@@ -389,9 +389,6 @@ class NeuroNER(object):
 
         tensorboard_character_embeddings = embeddings_projector_config.embeddings.add()
         tensorboard_character_embeddings.tensor_name = model.character_embedding_weights.name
-
-
-        # Link this tensor to its metadata file (e.g. labels)
         character_list_file_path = os.path.join(model_folder, 'tensorboard_metadata_characters.tsv')
         tensorboard_character_embeddings.metadata_path = os.path.relpath(character_list_file_path, '..')
 
@@ -429,6 +426,8 @@ class NeuroNER(object):
                 if epoch_number != 0:
                     # Train model: loop over all sequences of training set with shuffling
                     sequence_numbers=list(range(len(dataset.token_indices['train'])))
+                    print("----****____")
+                    print(dataset.token_indices['train'][:10])
                     random.shuffle(sequence_numbers)
                     # Thuc hien train
                     for sequence_number in sequence_numbers:

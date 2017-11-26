@@ -229,7 +229,7 @@ class EntityLSTM(object):
 
         grads_and_vars = self.optimizer.compute_gradients(self.loss)
         if parameters['gradient_clipping_value']:
-            grads_and_vars = [(tf.clip_by_value(grad, -parameters['gradient_clipping_value'], parameters['gradient_clipping_value']), var) 
+            grads_and_vars = [(tf.clip_by_value(grad, -parameters['gradient_clipping_value'], parameters['gradient_clipping_value']), var)
                               for grad, var in grads_and_vars]
         # By defining a global_step variable and passing it to the optimizer we allow TensorFlow handle the counting of training steps for us.
         # The global step will be automatically incremented by one every time you execute train_op.
@@ -252,7 +252,7 @@ class EntityLSTM(object):
         number_of_token_lowercase_and_digits_replaced_with_zeros_found = 0
         for token in dataset.token_to_index.keys():
             if token in token_to_vector.keys():
-                initial_weights[dataset.token_to_index[token]] = token_to_vector[token]
+                initial_weights[dataset.token_to_index[token]] = token_to_vector[token] # [word_vector] được săp xếp lại theo dataset
                 number_of_token_original_case_found += 1
             elif parameters['check_for_lowercase'] and token.lower() in token_to_vector.keys():
                 initial_weights[dataset.token_to_index[token]] = token_to_vector[token.lower()]
@@ -313,53 +313,53 @@ class EntityLSTM(object):
         sess.run(embedding_weights.assign(initial_weights))
 
     def restore_from_pretrained_model(self, parameters, dataset, sess, token_to_vector=None):
-        pretraining_dataset = pickle.load(open(os.path.join(parameters['pretrained_model_folder'], 'dataset.pickle'), 'rb')) 
+        pretraining_dataset = pickle.load(open(os.path.join(parameters['pretrained_model_folder'], 'dataset.pickle'), 'rb'))
         pretrained_model_checkpoint_filepath = os.path.join(parameters['pretrained_model_folder'], 'model.ckpt')
-        
+
         # Assert that the label sets are the same
         # Test set should have the same label set as the pretrained dataset
         assert pretraining_dataset.index_to_label == dataset.index_to_label
-    
+
         # If the token and character mappings are exactly the same
         if pretraining_dataset.index_to_token == dataset.index_to_token and pretraining_dataset.index_to_character == dataset.index_to_character:
-            
+
             # Restore the pretrained model
             self.saver.restore(sess, pretrained_model_checkpoint_filepath) # Works only when the dimensions of tensor variables are matched.
-        
+
         # If the token and character mappings are different between the pretrained model and the current model
         else:
-            
+
             # Resize the token and character embedding weights to match them with the pretrained model (required in order to restore the pretrained model)
             utils_tf.resize_tensor_variable(sess, self.character_embedding_weights, [pretraining_dataset.alphabet_size, parameters['character_embedding_dimension']])
             utils_tf.resize_tensor_variable(sess, self.token_embedding_weights, [pretraining_dataset.vocabulary_size, parameters['token_embedding_dimension']])
-        
+
             # Restore the pretrained model
             self.saver.restore(sess, pretrained_model_checkpoint_filepath) # Works only when the dimensions of tensor variables are matched.
-            
+
             # Get pretrained embeddings
-            character_embedding_weights, token_embedding_weights = sess.run([self.character_embedding_weights, self.token_embedding_weights]) 
-            
+            character_embedding_weights, token_embedding_weights = sess.run([self.character_embedding_weights, self.token_embedding_weights])
+
             # Restore the sizes of token and character embedding weights
             utils_tf.resize_tensor_variable(sess, self.character_embedding_weights, [dataset.alphabet_size, parameters['character_embedding_dimension']])
-            utils_tf.resize_tensor_variable(sess, self.token_embedding_weights, [dataset.vocabulary_size, parameters['token_embedding_dimension']]) 
-            
+            utils_tf.resize_tensor_variable(sess, self.token_embedding_weights, [dataset.vocabulary_size, parameters['token_embedding_dimension']])
+
             # Re-initialize the token and character embedding weights
             sess.run(tf.variables_initializer([self.character_embedding_weights, self.token_embedding_weights]))
-            
+
             # Load embedding weights from pretrained token embeddings first
-            self.load_pretrained_token_embeddings(sess, dataset, parameters, token_to_vector=token_to_vector) 
-            
+            self.load_pretrained_token_embeddings(sess, dataset, parameters, token_to_vector=token_to_vector)
+
             # Load embedding weights from pretrained model
             self.load_embeddings_from_pretrained_model(sess, dataset, pretraining_dataset, token_embedding_weights, embedding_type='token')
-            self.load_embeddings_from_pretrained_model(sess, dataset, pretraining_dataset, character_embedding_weights, embedding_type='character') 
-            
+            self.load_embeddings_from_pretrained_model(sess, dataset, pretraining_dataset, character_embedding_weights, embedding_type='character')
+
             del pretraining_dataset
             del character_embedding_weights
             del token_embedding_weights
-        
+
         # Get transition parameters
         transition_params_trained = sess.run(self.transition_parameters)
-        
+
         if not parameters['reload_character_embeddings']:
             sess.run(tf.variables_initializer([self.character_embedding_weights]))
         if not parameters['reload_character_lstm']:
@@ -372,8 +372,5 @@ class EntityLSTM(object):
             sess.run(tf.variables_initializer(self.feedforward_variables))
         if not parameters['reload_crf']:
             sess.run(tf.variables_initializer(self.crf_variables))
-    
+
         return transition_params_trained
-    
-    
-    
