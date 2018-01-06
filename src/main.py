@@ -245,16 +245,16 @@ def main(argv=sys.argv):
     arguments = parse_arguments(argv[1:])
 
     nn = NeuroNER(**arguments)
-    if argument.run_mode == "test":
+    if arguments["run_mode"] == "test":
         files = []
-        test_path = arguments.test_path
+        test_path = arguments["test_path"]
         if os.path.isdir(test_path):
-            files = [f for f in os.listdir(test_path) if os.path.isfile(os.path.join(test_path, f))]
+            files = [os.path.join(test_path, f) for f in os.listdir(test_path) if os.path.isfile(os.path.join(test_path, f))]
         else:
             files = [test_path]
         for fpath in files:
-            with open(fpath, "r") as f:
-                nn.predict(f.read())
+            nn.predict(fpath)
+
     else:
         nn.fit()
     nn.close()

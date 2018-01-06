@@ -390,12 +390,12 @@ class NeuroNER(object):
         tensorboard_token_embeddings = embeddings_projector_config.embeddings.add()
         tensorboard_token_embeddings.tensor_name = model.token_embedding_weights.name
         token_list_file_path = os.path.join(model_folder, 'tensorboard_metadata_tokens.tsv')
-        tensorboard_token_embeddings.metadata_path = os.path.relpath(token_list_file_path, '..')
+        tensorboard_token_embeddings.metadata_path = 'tensorboard_metadata_tokens.tsv'#os.path.relpath(token_list_file_path, '..')
 
         tensorboard_character_embeddings = embeddings_projector_config.embeddings.add()
         tensorboard_character_embeddings.tensor_name = model.character_embedding_weights.name
         character_list_file_path = os.path.join(model_folder, 'tensorboard_metadata_characters.tsv')
-        tensorboard_character_embeddings.metadata_path = os.path.relpath(character_list_file_path, '..')
+        tensorboard_character_embeddings.metadata_path = 'tensorboard_metadata_characters.tsv'#os.path.relpath(character_list_file_path, '..')
 
         # Saves a configuration file that TensorBoard will read during startup.
         projector.visualize_embeddings(embedding_writer, embeddings_projector_config)
@@ -504,10 +504,11 @@ class NeuroNER(object):
         text = ''
         with open(test_file_path, "r") as f:
             text = f.read()
+        test_file_path = test_file_path.split('/')[-1]
         self.prediction_count += 1
 
         if self.prediction_count == 1:
-            self.parameters['dataset_text_folder'] = os.path.join('..', 'data', 'test_result')
+            self.parameters['dataset_text_folder'] = os.path.join('..', 'data', 'temp')
             self.stats_graph_folder, _ = self._create_stats_graph_folder(self.parameters)
 
         # Update the deploy folder, file, and dataset
@@ -542,7 +543,9 @@ class NeuroNER(object):
         annotation_filepath = os.path.join(self.stats_graph_folder, 'brat', 'deploy', '{0}.ann'.format(utils.get_basename_without_extension(dataset_brat_deploy_filepath)))
         text2, entities = brat_to_conll.get_entities_from_brat(text_filepath, annotation_filepath, verbose=True)
         assert(text == text2)
-        print("Use brat tool to see result at ", annotation_filepath)
+        #print (entities)
+        os.rename(self.stats_graph_folder, "../data/" + self.stats_graph_folder.split('/')[-1])
+        print("Use brat tool to see result at ", "../data/" + self.stats_graph_folder.split('/')[-1])
 
     def get_params(self):
         return self.parameters
