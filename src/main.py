@@ -178,7 +178,7 @@ def parse_arguments(arguments=None):
         arguments the arguments, optionally given as argument
     '''
     parser = argparse.ArgumentParser(description='''NeuroNER CLI''', formatter_class=RawTextHelpFormatter)
-    parser.add_argument('--parameters_filepath', required=False, default=os.path.join('.','train-parameters.ini'), help='The parameters file')
+    parser.add_argument('--parameters_filepath', required=False, default=os.path.join('.','parameters.ini'), help='The parameters file')
 
     argument_default_value = 'argument_default_dummy_value_please_ignore_d41d8cd98f00b204e9800998ecf8427e'
     parser.add_argument('--character_embedding_dimension', required=False, default=argument_default_value, help='')
@@ -221,8 +221,6 @@ def parse_arguments(arguments=None):
     parser.add_argument('--use_crf', required=False, default=argument_default_value, help='')
     parser.add_argument('--use_pretrained_model', required=False, default=argument_default_value, help='')
     parser.add_argument('--verbose', required=False, default=argument_default_value, help='')
-    parser.add_argument('--run_mode', required=True, default="train", help='')
-    parser.add_argument('--test_path', required=False, default="", help='')
 
     try:
         arguments = parser.parse_args(args=arguments)
@@ -245,18 +243,7 @@ def main(argv=sys.argv):
     arguments = parse_arguments(argv[1:])
 
     nn = NeuroNER(**arguments)
-    if arguments["run_mode"] == "test":
-        files = []
-        test_path = arguments["test_path"]
-        if os.path.isdir(test_path):
-            files = [os.path.join(test_path, f) for f in os.listdir(test_path) if os.path.isfile(os.path.join(test_path, f))]
-        else:
-            files = [test_path]
-        for fpath in files:
-            nn.predict(fpath)
-
-    else:
-        nn.fit()
+    nn.fit()
     nn.close()
 
 if __name__ == "__main__":

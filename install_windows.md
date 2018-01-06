@@ -80,13 +80,10 @@ To add perl in your `Path` system environment variable:
 Installing BRAT is optional: it is only needed to easily create, change or view the annotations. BRAT does not run natively on Microsoft Windows, however it runs smoothly on [Cygwin](https://www.cygwin.com). After installing Cygwin, run `Cygwin.bat` (by default located on `C:\cygwin64\` if you used the 64-bit installation for Cygwin). Then, in the terminal that just opened, run:
 
 ```
-mkdir brat
-cd brat
-wget http://weaver.nlplab.org/~brat/releases/brat-v1.3_Crunchy_Frog.tar.gz
-tar xzf brat-v1.3_Crunchy_Frog.tar.gz
-cd brat-v1.3_Crunchy_Frog
 ./install.sh -u
-python standalone.py
+
+# To run BRAT (requires Python 2.5, 2.6 or 2.7):
+./brat.sh
 ```
 
 BRAT should now be accessible through the web browser at [http://127.0.0.1:8001](http://127.0.0.1:8001).

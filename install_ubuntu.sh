@@ -23,11 +23,11 @@ sudo pip3 install -U spacy
 sudo python3.5 -m spacy download en
 
 # To install NeuroNER:
-wget https://github.com/Franck-Dernoncourt/NeuroNER/archive/master.zip
+wget https://github.com/hmchuong/NeuroNER/archive/1.0.zip
 sudo apt-get install -y unzip
-unzip master.zip
-mkdir NeuroNER-master/data/word_vectors
-cd NeuroNER-master/data/word_vectors
+unzip NeuNER-1.0.zip
+mkdir NeuroNER-1.0/data/word_vectors
+cd NeuroNER-1.0/data/word_vectors
 
 # Download some word embeddings
 #wget http://nlp.stanford.edu/data/glove.6B.zip
@@ -37,4 +37,4 @@ unzip glove.6B.100d.zip
 # NeuroNER is now ready to run! By default it is configured to train and test on CoNLL-2003. To start the training:
 # To use the CPU if you have installed tensorflow, or use the GPU if you have installed tensorflow-gpu:
 cd ../../src
-python3.5 main.py
+./train.sh

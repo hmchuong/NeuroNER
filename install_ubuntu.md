@@ -55,15 +55,10 @@ sudo python3.5 -m spacy download en
 To install BRAT (optional, you just need it if you want to easily create, change or view the annotations):
 
 ```
-mkdir brat
-cd brat
-wget http://weaver.nlplab.org/~brat/releases/brat-v1.3_Crunchy_Frog.tar.gz
-tar xzf brat-v1.3_Crunchy_Frog.tar.gz
-cd brat-v1.3_Crunchy_Frog
 ./install.sh -u
 
 # To run BRAT (requires Python 2.5, 2.6 or 2.7):
-python standalone.py
+./brat.sh
 ```
 
 BRAT should now be accessible through the web browser at [http://127.0.0.1:8001](http://127.0.0.1:8001).

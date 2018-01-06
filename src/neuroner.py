@@ -272,9 +272,7 @@ class NeuroNER(object):
                  use_crf=argument_default_value,
                  use_pretrained_model=argument_default_value,
                  verbose=argument_default_value,
-                 argument_default_value=argument_default_value,
-                 run_mode=argument_default_value,
-                 test_path=argument_default_value):
+                 argument_default_value=argument_default_value):
 
         # Lấy toàn bộ argument được truyền vào
         arguments = dict( (k,str(v)) for k,v in locals().items() if k !='self')

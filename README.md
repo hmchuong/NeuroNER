@@ -1,4 +1,5 @@
 # NeuroNER
+*Updating by [Chuong Huynh](https://github.com/hmchuong), [An Dang](https://github.com/1412023), [Thong Huynh](https://github.com/HanhThong), [Hieu Nguyen](https://github.com/nthieuitus)*
 
 [![Build Status](https://travis-ci.org/Franck-Dernoncourt/NeuroNER.svg?branch=master)](https://travis-ci.org/Franck-Dernoncourt/NeuroNER)
 
@@ -49,26 +50,26 @@ Alternatively, you can use this [installation script](install_ubuntu.sh) for Ubu
 To use this script, run the following command from the terminal:
 
 ```
-wget https://raw.githubusercontent.com/Franck-Dernoncourt/NeuroNER/master/install_ubuntu.sh; bash install_ubuntu.sh
+wget https://raw.githubusercontent.com/hmchuong/NeuroNER/master/install_ubuntu.sh; bash install_ubuntu.sh
 ```
 
 
 ## Downloading NeuroNER
 
-To download NeuroNER code, download and unzip https://github.com/Franck-Dernoncourt/NeuroNER/archive/master.zip, which can be done on Ubuntu and Mac OS X with:
+To download NeuroNER code, download and unzip https://github.com/hmchuong/NeuroNER/archive/1.0.zip, which can be done on Ubuntu and Mac OS X with:
 
 ```
-wget https://github.com/Franck-Dernoncourt/NeuroNER/archive/master.zip
+wget https://github.com/hmchuong/NeuroNER/archive/1.0.zip
 sudo apt-get install -y unzip # This line is for Ubuntu users only
-unzip master.zip
+unzip NeuroNER-1.0.zip
 ```
 
 It also needs some word embeddings, which should be downloaded from http://neuroner.com/data/word_vectors/glove.6B.100d.zip, unzipped and placed in `/data/word_vectors`. This can be done on Ubuntu and Mac OS X with:
 
 ```
 # Download some word embeddings
-mkdir NeuroNER-master/data/word_vectors
-cd NeuroNER-master/data/word_vectors
+mkdir NeuroNER-1.0/data/word_vectors
+cd NeuroNER-1.0/data/word_vectors
 wget http://neuroner.com/data/word_vectors/glove.6B.100d.zip
 unzip glove.6B.100d.zip
 ```
@@ -92,19 +93,20 @@ CUDA_VISIBLE_DEVICES="" python3.5 main.py
 CUDA_VISIBLE_DEVICES=1 python3.5 main.py
 ```
 
-If you wish to change any of NeuroNER parameters, you should modify the [`src/parameters.ini`](src/parameters.ini) configuration file. Alternatively, any parameter may be specified in the command line.
+If you wish to change any of NeuroNER parameters, you should modify the [`src/parameters.ini`](src/parameters.ini) config file. Alternatively, any parameter may be specified in the command line.
 
 For example, to reduce the number of training epochs and not use any pre-trained token embeddings:
 ```
 python3.5 main.py --maximum_number_of_epochs=2 --token_pretrained_embedding_filepath=""
 ```
 
-
 To perform NER on some plain texts using a pre-trained model:
 
 ```
 python3.5 main.py --train_model=False --use_pretrained_model=True --dataset_text_folder=../data/example_unannotated_texts --pretrained_model_folder=../trained_models/conll_2003_en
 ```
+
+However, to make it easy to use, we provide 2 script files [`src/train.sh`](src/train.sh) and [`src/test.sh`](src/test.sh) for trainning and testing.
 
 If a parameter is specified in both the [`src/parameters.ini`](src/parameters.ini) configuration file and as a command line argument, then the command line argument takes precedence (i.e., the parameter in [`src/parameters.ini`](src/parameters.ini) is ignored). You may specify a different configuration file with the `--parameters_filepath` command line argument. The command line arguments have no default value except for `--parameters_filepath`, which points to [`src/parameters.ini`](src/parameters.ini).
 
@@ -169,7 +171,7 @@ In order to share a pretrained model, please [submit a new issue](https://github
 
 You may launch TensorBoard during or after the training phase. To do so, run in the terminal from the NeuroNER folder:
 ```
-tensorboard --logdir=output
+tensorboard --logdir=output/<generated trained folder>/model
 ```
 
 This starts a web server that is accessible at http://127.0.0.1:6006 from your web browser.
