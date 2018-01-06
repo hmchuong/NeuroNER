@@ -272,7 +272,9 @@ class NeuroNER(object):
                  use_crf=argument_default_value,
                  use_pretrained_model=argument_default_value,
                  verbose=argument_default_value,
-                 argument_default_value=argument_default_value):
+                 argument_default_value=argument_default_value,
+                 run_mode=argument_default_value,
+                 test_path=argument_default_value):
 
         # Lấy toàn bộ argument được truyền vào
         arguments = dict( (k,str(v)) for k,v in locals().items() if k !='self')
@@ -310,6 +312,9 @@ class NeuroNER(object):
             ### Initialize the model and restore from pretrained model if needed
             sess.run(tf.global_variables_initializer())
             if not parameters['use_pretrained_model']:
+                '''
+                Init token_embedding_weights với token_to_vector
+                '''
                 model.load_pretrained_token_embeddings(sess, dataset, parameters, token_to_vector)
                 '''
                 unique_labels: các nhãn entity độc lập trong dataset hiện có (conll)
@@ -494,12 +499,15 @@ class NeuroNER(object):
         for dataset_type in dataset_filepaths.keys():
             writers[dataset_type].close()
 
-    def predict(self, text):
+    def predict(self, test_file_path):
         # Not use
+        text = ''
+        with open(test_file_path, "r") as f:
+            text = f.read()
         self.prediction_count += 1
 
         if self.prediction_count == 1:
-            self.parameters['dataset_text_folder'] = os.path.join('..', 'data', 'temp')
+            self.parameters['dataset_text_folder'] = os.path.join('..', 'data', 'test_result')
             self.stats_graph_folder, _ = self._create_stats_graph_folder(self.parameters)
 
         # Update the deploy folder, file, and dataset
@@ -513,7 +521,7 @@ class NeuroNER(object):
         ### Create brat folder and file
         dataset_brat_deploy_folder = os.path.join(self.parameters['dataset_text_folder'], dataset_type)
         utils.create_folder_if_not_exists(dataset_brat_deploy_folder)
-        dataset_brat_deploy_filepath = os.path.join(dataset_brat_deploy_folder, 'temp_{0}.txt'.format(str(self.prediction_count).zfill(5)))#self._get_dataset_brat_deploy_filepath(dataset_brat_deploy_folder)
+        dataset_brat_deploy_filepath = os.path.join(dataset_brat_deploy_folder, test_file_path.format(str(self.prediction_count).zfill(5)))#self._get_dataset_brat_deploy_filepath(dataset_brat_deploy_folder)
         with codecs.open(dataset_brat_deploy_filepath, 'w', 'UTF-8') as f:
             f.write(text)
         ### Update deploy filepaths
@@ -534,7 +542,7 @@ class NeuroNER(object):
         annotation_filepath = os.path.join(self.stats_graph_folder, 'brat', 'deploy', '{0}.ann'.format(utils.get_basename_without_extension(dataset_brat_deploy_filepath)))
         text2, entities = brat_to_conll.get_entities_from_brat(text_filepath, annotation_filepath, verbose=True)
         assert(text == text2)
-        return entities
+        print("Use brat tool to see result at ", annotation_filepath)
 
     def get_params(self):
         return self.parameters

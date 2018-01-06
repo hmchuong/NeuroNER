@@ -11,24 +11,11 @@ import utils_nlp
 
 def train_step(sess, dataset, sequence_number, model, parameters):
     # Perform one iteration
-    token_indices_sequence = dataset.token_indices['train'][sequence_number] #
-    print("Token indices sequence:\n")
-    print (token_indices_sequence)
-    print("Token indices:\n")
-    for index in token_indices_sequence:
-        print (dataset.index_to_token[index])
+    token_indices_sequence = dataset.token_indices['train'][sequence_number]
 
     for i, token_index in enumerate(token_indices_sequence):
         if token_index in dataset.infrequent_token_indices and np.random.uniform() < 0.5:
             token_indices_sequence[i] = dataset.UNK_TOKEN_INDEX
-    print("Label vector indices\n")
-    print(dataset.label_vector_indices['train'][sequence_number])
-    print("Character indices padded\n")
-    print(dataset.character_indices_padded['train'][sequence_number])
-    print("Token length\n")
-    print(dataset.token_lengths['train'][sequence_number])
-    print("Label indices\n")
-    print(dataset.label_indices['train'][sequence_number])
     feed_dict = {
       model.input_token_indices: token_indices_sequence,
       model.input_label_indices_vector: dataset.label_vector_indices['train'][sequence_number],

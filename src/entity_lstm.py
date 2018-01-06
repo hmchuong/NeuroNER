@@ -101,6 +101,11 @@ class EntityLSTM(object):
                 shape=[dataset.vocabulary_size, parameters['token_embedding_dimension']],
                 initializer=initializer,
                 trainable=not parameters['freeze_token_embeddings'])
+            '''
+            Tìm trong token_embedding_weights những vector của token trong input_token_indices
+            Ví dụ input_token_indices = [221, 443]
+            embedded_tokens = [vector tại index 221, vector tại index 443]
+            '''
             embedded_tokens = tf.nn.embedding_lookup(self.token_embedding_weights, self.input_token_indices)
             utils_tf.variable_summaries(self.token_embedding_weights)
 
